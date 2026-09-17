@@ -56,12 +56,6 @@ Copy `docs/use-case-template/`, register every component path in
 the core-only rule, the runtime-schema-discovery rule, and why some text in this repo is duplicated
 on purpose.
 
-## See also
-
-[`build-with-wordpress`](https://github.com/Automattic/claude-code-wordpress.com) in the official
-Automattic marketplace is for **building** WordPress.com sites. This marketplace is about **using**
-one as an application. Install both if you want both.
-
 ## License
 
 GPL-3.0-or-later. See [`LICENSE`](LICENSE).
