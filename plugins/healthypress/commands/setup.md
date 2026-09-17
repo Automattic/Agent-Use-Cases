@@ -1,21 +1,13 @@
 ---
-description: Create a new private WordPress.com site as a personal health record — privacy gate first, then taxonomy and pages. Pass a site to re-audit an existing one instead.
+description: Create a new private WordPress.com site as a personal health record — privacy gate first, then taxonomy and pages.
 allowed-tools: mcp__wpcom__wpcom-mcp-site, mcp__wpcom__wpcom-mcp-create-site, mcp__wpcom__wpcom-mcp-content-authoring, mcp__wpcom__wpcom-mcp-user-management, mcp__wpcom__authenticate, mcp__wpcom__complete_authentication, mcp__plugin_healthypress_wpcom__wpcom-mcp-site, mcp__plugin_healthypress_wpcom__wpcom-mcp-create-site, mcp__plugin_healthypress_wpcom__wpcom-mcp-content-authoring, mcp__plugin_healthypress_wpcom__wpcom-mcp-user-management, mcp__plugin_healthypress_wpcom__authenticate, mcp__plugin_healthypress_wpcom__complete_authentication, AskUserQuestion, Bash, Skill
-arguments:
-  - name: site
-    description: Omit this for the normal case — a brand new site is created. Pass a site (domain or site ID) only to re-run the privacy hardening and audit against a site HealthyPress already set up.
-    required: false
 ---
 
 # Set Up HealthyPress
 
-**Default behavior: this command creates a brand new private WordPress.com site.** It never asks you
-to pick from your existing sites, and it never writes health structure onto a site that has other
-things on it.
-
-Pass a `site` argument to run in **audit mode** instead: no site is created, and the command
-re-hardens and re-verifies the privacy settings of a site HealthyPress already set up. Audit mode is
-idempotent — run it any time to confirm the site is still private.
+**This command always creates a brand new private WordPress.com site.** It never asks you to pick
+from your existing sites, and it never writes health structure onto a site that has other things on
+it.
 
 Load the `wpcom-mcp-operations` skill before step 1 and the `health-content-model` skill before
 step 5.
@@ -57,21 +49,11 @@ isn't enabled on the account. Tell the user:
 
 Then STOP.
 
-## Step 2: Create the site (or, in audit mode, load it)
+## Step 2: Create the site
 
-**If the `site` argument was given — audit mode.** Confirm the site exists and that it already has
-HealthyPress structure on it (the categories from step 5). If it has content but no HealthyPress
-categories, STOP:
-
-> `<site>` doesn't look like a HealthyPress site — I don't see the HealthyPress categories on it.
-> I'm not going to add health structure to a site that's being used for something else. Run
-> `/healthypress:setup` with no argument to create a dedicated site.
-
-Then skip to step 3 with that site.
-
-**Otherwise — the normal case. Create a new site.** Do not list the user's sites and do not ask them
-to choose one; a dedicated site is the whole point, and picking an existing one is how health
-content ends up somewhere it shouldn't be.
+Create a new site. Do not list the user's sites and do not ask them to choose one; a dedicated site
+is the whole point, and picking an existing one is how health content ends up somewhere it
+shouldn't be.
 
 `describe` then call the provisioning operation on `wpcom-mcp-create-site`. For the name: generate a
 neutral, non-identifying one (`personal-log-<4 random chars>` is fine) rather than asking. Do not
@@ -89,8 +71,6 @@ the immediate privacy gate is the most dangerous thing this command could do.
 Read the site's plan. If it is a **free** site, tell the user:
 
 > `<site>` is on the free plan. MCP access on free sites is limited to 30 days from site creation.
-> Setup and day-to-day logging will work, but a long history import may hit that cliff partway
-> through. A paid plan removes the limit.
 
 Continue — setup does not need confirmation for this. (`/healthypress:backfill` stops and asks.)
 
@@ -117,8 +97,8 @@ Run in this order, and treat the **read-back** as the only evidence:
 
    > I could not confirm `<site>` is Private, so I'm stopping before writing anything. It reports
    > `<actual visibility>`, which means the content could be reachable. Please set
-   > **Settings → General → Privacy → Private** in the WordPress.com dashboard, then re-run
-   > `/healthypress:setup <site>`.
+   > **Settings → General → Privacy → Private** in the WordPress.com dashboard, then tell me and
+   > I'll read the status back and continue.
 
    Do not proceed. Do not create pages or posts.
 
@@ -218,9 +198,6 @@ reverse-chronological order as the first thing anyone sees.
 **About This Site** is the one non-derived page. Write it with: what this site is, that it is
 self-entered and not a medical record, that HIPAA does not apply to it, the model in two sentences
 (posts are events, pages are derived), and the Boundaries block below.
-
-In audit mode, existing pages are left alone; a page missing the footer is reported in step 7 rather
-than silently overwritten.
 
 ## Step 7: Print the privacy report
 

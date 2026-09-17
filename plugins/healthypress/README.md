@@ -29,15 +29,14 @@ Then:
    browser, you approve, and it carries on. There's no token to create or paste, and nothing to set
    up in `/mcp` first.
 
-`/healthypress:setup` **creates a new site** every time you run it without arguments. It won't offer
-to use an existing site, because a dedicated site is what keeps health content out of places it
-shouldn't be. To re-audit a site it already set up, pass it: `/healthypress:setup my-log.wordpress.com`.
+`/healthypress:setup` **creates a new site** every time you run it. It won't offer to use an
+existing site, because a dedicated site is what keeps health content out of places it shouldn't be.
 
 ## Commands
 
 | Command | What it does |
 |---|---|
-| `/healthypress:setup` | Creates a new site (pass a site to re-audit an existing one instead), then runs the **privacy gate** — launch, set Private, verify, discourage search engines, disable comments and newsletter email, verify zero subscribers, neutral title, timezone — then creates the taxonomy and the pages and prints a privacy report. Re-run it with a site argument any time as a privacy audit — that mode is idempotent. Stops hard if the site can't be made Private. |
+| `/healthypress:setup` | Creates a new site, then runs the **privacy gate** — set Private, verify, discourage search engines, disable comments and newsletter email, verify zero subscribers, neutral title, timezone — then creates the taxonomy and the pages and prints a privacy report. Stops hard if the site can't be made Private. |
 | `/healthypress:log` | The daily driver. One event in, one private post out: interview, classify, resolve tags, compute the date, compose, read the whole record back for confirmation, save, attach files, refresh the affected pages. |
 | `/healthypress:backfill` | Guided history intake, era by era and system by system. Checkpoints every ~10 records, keeps a resumable captured list, never re-asks about a declined topic, regenerates all pages once at the end. Warns about the free-plan 30-day cliff before starting. |
 | `/healthypress:share` | Care team access. Only runs on a Private site. Invites as **Editor** (full read of the whole timeline — and, unavoidably, edit and trash rights) or **Viewer** (read-only, published pages only), in plain language about the tradeoff. Also lists, changes, and revokes. |

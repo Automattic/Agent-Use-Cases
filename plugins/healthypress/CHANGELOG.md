@@ -2,6 +2,14 @@
 
 All notable changes to HealthyPress are documented here.
 
+## 0.1.3 — 2026-09-17
+
+### Removed
+
+- **`/healthypress:setup` no longer has an audit mode.** The `site` argument and the branch that
+  re-hardened and re-verified an existing HealthyPress site are gone; setup now always provisions a
+  brand new site. Re-auditing an existing site is planned as its own command later.
+
 ## 0.1.2 — 2026-09-17
 
 First live run of `/healthypress:setup` against a real WordPress.com site, which falsified the
