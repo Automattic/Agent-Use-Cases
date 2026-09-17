@@ -38,27 +38,6 @@ MCP is available on all paid WordPress.com plans. **Free sites get 30 days from 
 |---|---|
 | [`healthypress`](plugins/healthypress) | A private WordPress.com site as a **personal health record**: privacy-hardened setup, guided history backfill, ongoing journaling, derived summary pages (current medications, allergies, conditions, emergency summary), and care team sharing. Records and organizes; never diagnoses or advises. |
 
-## Before you put real data in one of these
-
-These plugins store real information on a hosted website, and the honest limits are the same for all
-of them:
-
-- **Hosted content has no special legal protection.** A site you own is not a regulated system of
-  record. For health data specifically, **HIPAA does not apply** — it covers providers and insurers,
-  not your own website.
-- **Automattic staff can access site content**, as with any hosted WordPress.com site, and hosted
-  content is subject to legal process.
-- **Your conversation transcripts are a second copy.** Everything you tell the agent to record
-  passes through a conversation, stored somewhere you don't control under a different policy than
-  the site. There's no version of agent-driven data entry where this isn't true.
-- **Site visibility is one setting.** Each plugin ships an idempotent setup command that doubles as
-  a privacy audit. Re-run it; don't assume.
-- **Export is manual.** There's no export operation in the MCP. Use `wordpress.com/export/<site>`
-  for a WXR backup.
-
-Each plugin's own README states where its data model breaks down and who shouldn't use it. Read that
-one too.
-
 ## Repository layout
 
 ```
