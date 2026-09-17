@@ -62,9 +62,8 @@ The display title gets set to something neutral during the privacy gate and can 
 later; the URL is forever, so keep it dull.
 
 Tell the user the site was created and that you are now making it private — then do that
-immediately. **A new site starts in Coming Soon, which is not private**, so the privacy gate in
-step 4 must run in the same turn. Do not hand the user a site URL and finish; provisioning without
-the immediate privacy gate is the most dangerous thing this command could do.
+immediately. The privacy gate in step 4 must run in the same turn. Do not hand the user a site URL
+and finish; skipping the immediate privacy gate is the most dangerous thing this command could do.
 
 ## Step 3: Check the plan and the MCP clock
 
@@ -75,14 +74,6 @@ Read the site's plan. If it is a **free** site, tell the user:
 Continue — setup does not need confirmation for this. (`/healthypress:backfill` stops and asks.)
 
 ## Step 4: The privacy gate
-
-**Verified 2026-09-17 against a live site: a freshly provisioned WordPress.com site already reports
-`visibility: private` and `launch_status: unlaunched`.** It is *not* in Coming Soon, and Private is
-*not* gated behind launching. So:
-
-> **Do NOT launch the site.** Launching transitions it toward live. There is no reason to launch a
-> HealthyPress site, ever — a private unlaunched site is exactly the posture we want. If a future
-> version needs `manage-site.launch`, that's a deliberate decision, not a setup step.
 
 Run in this order, and treat the **read-back** as the only evidence:
 
@@ -209,7 +200,6 @@ HealthyPress setup — personallogq4t8.wordpress.com (blog 257423784)
 
 Privacy
   Visibility            private ✓        (read back)
-  Launch status         unlaunched ✓     (never launched, by design)
   blog_public           -1 ✓
   Registration open     yes ✗            write does not persist — see below
   Comments              login required ⚠  cannot be disabled via MCP

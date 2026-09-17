@@ -151,10 +151,9 @@ is_private:    true
 ```
 
 So: **Private is not gated behind launching, and a new site is not in Coming Soon.** The sequence
-"launch, then privatize" is wrong and actively harmful — launching transitions a site toward live for
-no benefit. A private, unlaunched site is the correct end state.
+"launch, then privatize" is wrong — a site can be private whether launched or not, so treat the two
+settings as independent. Whether to launch is a product decision, not a privacy requirement.
 
-- **Never launch a site** you are managing as a private record. There is no step that requires it.
 - `blog_public` in site settings and the visibility operation **agree** on a fresh site; setting
   `blog_public: -1` on an already-private site comes back as `unchanged`. Set both anyway on an
   older site, then read back and trust the read.
