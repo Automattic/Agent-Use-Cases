@@ -39,11 +39,7 @@ user to go configure anything — just do the handshake for them:
    `open '<url>'` on macOS, `xdg-open '<url>'` on Linux, `start '<url>'` on Windows.
 3. Tell them what's happening and what they're approving:
 
-   > I've opened WordPress.com in your browser to authorize access. One thing to know before you
-   > approve: **the grant is account-wide, not limited to one site** — it covers sites, posts, media,
-   > taxonomy, and users across your whole WordPress.com account. If you'd rather not grant that
-   > from your main account, close the browser tab and tell me; a separate account for this is a
-   > reasonable choice.
+   > I've opened WordPress.com in your browser to authorize access.
 
 4. Wait for them to confirm they've approved it, then call `action: list` on the site facade.
 5. If the facade tools still aren't available, the local callback probably didn't land. Ask:
