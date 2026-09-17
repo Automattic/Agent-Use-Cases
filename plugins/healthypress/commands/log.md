@@ -1,6 +1,6 @@
 ---
 description: Record one health event — interview, classify, tag, date, compose, confirm, save as private, refresh affected pages
-allowed-tools: mcp__wpcom__wpcom-mcp-site, mcp__wpcom__wpcom-mcp-content-authoring, mcp__plugin_healthypress_wpcom__wpcom-mcp-site, mcp__plugin_healthypress_wpcom__wpcom-mcp-content-authoring, AskUserQuestion, Read, Skill
+allowed-tools: mcp__wpcom__wpcom-mcp-site, mcp__wpcom__wpcom-mcp-content-authoring, mcp__plugin_healthypress_wpcom__wpcom-mcp-site, mcp__plugin_healthypress_wpcom__wpcom-mcp-content-authoring, mcp__wpcom__authenticate, mcp__wpcom__complete_authentication, mcp__plugin_healthypress_wpcom__authenticate, mcp__plugin_healthypress_wpcom__complete_authentication, AskUserQuestion, Read, Skill, Bash
 arguments:
   - name: entry
     description: What happened, in your own words (e.g. "saw Dr. Okafor today about the echo"). If omitted, you will be asked.
@@ -26,6 +26,14 @@ clarifying questions about the record.
 A past event being described in the past tense ("I went to the ER in March") is a record, not an
 emergency. Judge the tense and the timeframe, and if it's genuinely ambiguous, ask whether this is
 happening right now.
+
+## Step 0.5: Connect to the MCP server
+
+If the only `wpcom` tools available are `authenticate` and `complete_authentication`, the server
+isn't authorized yet. Call `authenticate`, open the returned URL in the user's browser with Bash
+(`open` / `xdg-open` / `start`), tell them the grant is account-wide, and wait for them to approve.
+See `wpcom-mcp-operations` for the full handshake, including the fallback when the callback doesn't
+land. Don't send the user off to configure anything — do it for them.
 
 ## Step 1: Confirm the site is set up
 

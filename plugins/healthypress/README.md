@@ -25,9 +25,21 @@ Then:
 
 1. At WordPress.com, go to **Preferences → AI and MCP** and enable MCP access. Nothing works until
    you do.
-2. Run `/mcp` in Claude Code and connect `wpcom`. Claude Code handles the OAuth sign-in itself —
-   there's no token to create or paste.
-3. Run `/healthypress:setup`.
+2. Run `/healthypress:setup`. It handles the WordPress.com authorization itself — it opens your
+   browser, you approve, and it carries on. There's no token to create or paste, and nothing to set
+   up in `/mcp` first.
+
+**Read this before you approve the authorization.** The grant WordPress.com asks for is
+**account-wide, not site-specific**: sites, posts, media, taxonomy, users, stats, and notifications
+across your whole WordPress.com account. HealthyPress only touches the one site it creates, but the
+permission you're granting is broader than that, and it's issued to a shared Claude Code OAuth
+client rather than to HealthyPress by name — so it won't be obvious which app it belongs to when you
+later review connected applications. If that's not acceptable, use a separate WordPress.com account
+for this.
+
+`/healthypress:setup` **creates a new site** every time you run it without arguments. It won't offer
+to use an existing site, because a dedicated site is what keeps health content out of places it
+shouldn't be. To re-audit a site it already set up, pass it: `/healthypress:setup my-log.wordpress.com`.
 
 Available on all paid WordPress.com plans. **Free sites get 30 days of MCP access from site
 creation** — fine for trying this out, not enough for a long history import.
@@ -36,7 +48,7 @@ creation** — fine for trying this out, not enough for a long history import.
 
 | Command | What it does |
 |---|---|
-| `/healthypress:setup` | Picks or creates the site, then runs the **privacy gate** — launch, set Private, verify, discourage search engines, disable comments and newsletter email, verify zero subscribers, neutral title, timezone — then creates the taxonomy and the pages and prints a privacy report. **Idempotent: re-run it any time as a privacy audit.** Stops hard if the site can't be made Private. |
+| `/healthypress:setup` | Creates a new site (pass a site to re-audit an existing one instead), then runs the **privacy gate** — launch, set Private, verify, discourage search engines, disable comments and newsletter email, verify zero subscribers, neutral title, timezone — then creates the taxonomy and the pages and prints a privacy report. Re-run it with a site argument any time as a privacy audit — that mode is idempotent. Stops hard if the site can't be made Private. |
 | `/healthypress:log` | The daily driver. One event in, one private post out: interview, classify, resolve tags, compute the date, compose, read the whole record back for confirmation, save, attach files, refresh the affected pages. |
 | `/healthypress:backfill` | Guided history intake, era by era and system by system. Checkpoints every ~10 records, keeps a resumable captured list, never re-asks about a declined topic, regenerates all pages once at the end. Warns about the free-plan 30-day cliff before starting. |
 | `/healthypress:share` | Care team access. Only runs on a Private site. Invites as **Editor** (full read of the whole timeline — and, unavoidably, edit and trash rights) or **Viewer** (read-only, published pages only), in plain language about the tradeoff. Also lists, changes, and revokes. |
@@ -63,8 +75,10 @@ So a medication isn't a post — *starting* lisinopril is a post, *stopping* it 
 conditions (diagnosis minus resolution), allergies (latest reaction per allergen), and the care team.
 
 - **Categories** are the kind of record: a closed, hierarchical list (`visit`, `lab`, `med-start`,
-  `diagnosis`, `symptoms`, …), exactly one leaf per post. `needs-triage` is the site default, so
-  nothing gets lost.
+  `diagnosis`, `symptoms`, …), exactly one leaf per post, created by `/healthypress:setup`.
+  `needs-triage` is where unclassifiable records go — though WordPress.com does not let the MCP
+  change a site's *default* category, so that safety net depends on `/log` always assigning one
+  explicitly.
 - **Tags** are the entities, namespaced with a closed set of prefixes: `dx-` condition, `rx-`
   medication (generic names only), `sx-` symptom, `dr-` clinician, `fac-` facility, `test-` test,
   `alg-` allergen, `sys-` body system, `src-` provenance, `precision-` date precision.

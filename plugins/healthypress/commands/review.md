@@ -1,6 +1,6 @@
 ---
 description: Read-only factual report on what's in the health record, plus a data-hygiene and privacy audit — counts and patterns, never interpretation
-allowed-tools: mcp__wpcom__wpcom-mcp-site, mcp__wpcom__wpcom-mcp-content-authoring, mcp__wpcom__wpcom-mcp-user-management, mcp__plugin_healthypress_wpcom__wpcom-mcp-site, mcp__plugin_healthypress_wpcom__wpcom-mcp-content-authoring, mcp__plugin_healthypress_wpcom__wpcom-mcp-user-management, Read, Skill
+allowed-tools: mcp__wpcom__wpcom-mcp-site, mcp__wpcom__wpcom-mcp-content-authoring, mcp__wpcom__wpcom-mcp-user-management, mcp__plugin_healthypress_wpcom__wpcom-mcp-site, mcp__plugin_healthypress_wpcom__wpcom-mcp-content-authoring, mcp__plugin_healthypress_wpcom__wpcom-mcp-user-management, mcp__wpcom__authenticate, mcp__wpcom__complete_authentication, mcp__plugin_healthypress_wpcom__authenticate, mcp__plugin_healthypress_wpcom__complete_authentication, Read, Skill, Bash
 arguments:
   - name: scope
     description: What to report on — a tag, category, date range, or "hygiene" for just the audit. If omitted, reports on everything.
@@ -15,6 +15,14 @@ the command that would fix it.
 
 Load `health-content-model` and `wpcom-mcp-operations` before step 1; `health-summary-pages` before
 step 3.
+
+## Step 0.5: Connect to the MCP server
+
+If the only `wpcom` tools available are `authenticate` and `complete_authentication`, the server
+isn't authorized yet. Call `authenticate`, open the returned URL in the user's browser with Bash
+(`open` / `xdg-open` / `start`), tell them the grant is account-wide, and wait for them to approve.
+See `wpcom-mcp-operations` for the full handshake, including the fallback when the callback doesn't
+land. Don't send the user off to configure anything — do it for them.
 
 ## Step 1: Read the record
 

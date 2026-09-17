@@ -1,6 +1,6 @@
 ---
 description: Give a care team member access to the private health site, or change and revoke that access — private sites only
-allowed-tools: mcp__wpcom__wpcom-mcp-site, mcp__wpcom__wpcom-mcp-user-management, mcp__plugin_healthypress_wpcom__wpcom-mcp-site, mcp__plugin_healthypress_wpcom__wpcom-mcp-user-management, AskUserQuestion, Skill
+allowed-tools: mcp__wpcom__wpcom-mcp-site, mcp__wpcom__wpcom-mcp-user-management, mcp__plugin_healthypress_wpcom__wpcom-mcp-site, mcp__plugin_healthypress_wpcom__wpcom-mcp-user-management, mcp__wpcom__authenticate, mcp__wpcom__complete_authentication, mcp__plugin_healthypress_wpcom__authenticate, mcp__plugin_healthypress_wpcom__complete_authentication, AskUserQuestion, Skill, Bash
 arguments:
   - name: action
     description: What to do — "invite", "list", "change", "revoke". If omitted, you will be asked.
@@ -13,6 +13,14 @@ arguments:
 # Share with Your Care Team
 
 Manages who else can see the health site. Load `wpcom-mcp-operations` before step 2.
+
+## Step 0.5: Connect to the MCP server
+
+If the only `wpcom` tools available are `authenticate` and `complete_authentication`, the server
+isn't authorized yet. Call `authenticate`, open the returned URL in the user's browser with Bash
+(`open` / `xdg-open` / `start`), tell them the grant is account-wide, and wait for them to approve.
+See `wpcom-mcp-operations` for the full handshake, including the fallback when the callback doesn't
+land. Don't send the user off to configure anything — do it for them.
 
 ## Step 1: The private-site gate
 

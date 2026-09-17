@@ -61,10 +61,37 @@ mcp__plugin_healthypress_wpcom__<facade>
 Command frontmatter must list **both** forms in `allowed-tools`, or the command breaks depending on
 how the server was installed. Whichever prefix is present at runtime is the one to call.
 
+## Authentication — the facade tools don't exist until you authorize
+
+**Verified 2026-09-17.** On a fresh install the server exposes only two tools, `authenticate` and
+`complete_authentication`. The facade tools are absent entirely — so an unauthenticated server looks
+like a server with no capabilities, not like a server returning auth errors. Claude Code's native
+OAuth handling for `type: "http"` does **not** complete this on its own.
+
+The handshake, which you should just perform rather than asking the user to go configure something:
+
+1. Call `authenticate`. It returns an authorization URL.
+2. **Open the URL in the user's browser** with Bash — `open` on macOS, `xdg-open` on Linux, `start`
+   on Windows. Don't make them copy a 600-character URL.
+3. Wait for them to confirm, then call a facade operation. The tools appear automatically once the
+   local callback lands.
+4. If the facade tools still aren't there, the callback didn't land. Ask for the full
+   `http://localhost:<port>/callback?...` URL from their address bar and pass it to
+   `complete_authentication`.
+
+**The grant is account-wide.** The requested scopes cover sites, posts, media, taxonomy, users,
+stats, and notifications across the user's entire WordPress.com account — not the one site being
+managed. Say so before they approve; it's their decision to make, and a separate account is a
+reasonable response to it.
+
+Commands that call these tools must list `authenticate` and `complete_authentication` in
+`allowed-tools` under **both** prefixes, alongside the facades.
+
 ## Access and gating
 
-- The user enables MCP access at WordPress.com → **Preferences → AI and MCP**. Until they do, every
-  call fails with an authorization error. That's a user action; you can't fix it from here.
+- Authorizing is separate from **enabling**. The user enables MCP access at WordPress.com →
+  **Preferences → AI and MCP**. If facade calls fail with an authorization error *after* a
+  successful handshake, that's the setting to point at.
 - Available on all paid plans. **Free sites get 30 days from site creation** (whether the clock
   starts at creation or at first MCP use is unverified — see `docs/wpcom-mcp-notes.md` in the repo).
   Warn before starting any long, multi-session project on a free site.
@@ -114,17 +141,51 @@ a replace is not undoable from the site — read the section first if the old co
 
 ## Site visibility and launch ordering
 
-This sequence is load-bearing and easy to get wrong:
+**Verified 2026-09-17, and it is the opposite of what the WordPress.com docs imply.** A freshly
+provisioned site already reports:
 
-1. A freshly provisioned site is in **Coming Soon**, which has a **shareable preview link**. That is
-   not a privacy posture — it is a soft gate.
-2. The **Private** option only appears **after a site is launched**. So: check status → launch →
-   set visibility to private → **read status back and verify**.
-3. `blog_public` in site settings and the visibility operation can disagree. Set both, then read
-   back, and trust the read — not the write's return value.
-4. Do not write anything sensitive until the verification read says Private.
+```
+launch_status: "unlaunched"
+visibility:    "private"
+is_private:    true
+```
 
-If the site cannot be made Private, that is a stop condition, not a warning.
+So: **Private is not gated behind launching, and a new site is not in Coming Soon.** The sequence
+"launch, then privatize" is wrong and actively harmful — launching transitions a site toward live for
+no benefit. A private, unlaunched site is the correct end state.
+
+- **Never launch a site** you are managing as a private record. There is no step that requires it.
+- `blog_public` in site settings and the visibility operation **agree** on a fresh site; setting
+  `blog_public: -1` on an already-private site comes back as `unchanged`. Set both anyway on an
+  older site, then read back and trust the read.
+- `get_status` can report a legacy `discourage_search` visibility (public, search engines
+  discouraged). `set_visibility` **cannot target it** — from that state the only choices are
+  `public` or `private`. `private` is strictly stronger, so this never matters here.
+- The visibility operation refuses to make a site private when it has active subscribers unless
+  `user_confirmed: true` is passed. Read the subscriber count first rather than forcing it.
+- Do not write anything sensitive until a **read-back** says `private`.
+
+If a site cannot be confirmed private, that is a stop condition, not a warning.
+
+### What `settings.update` can and cannot write
+
+Writable: `blogname`, `blogdescription`, `blog_public` (−1 private / 0 public-discouraged / 1
+public), `timezone_string`, `date_format`, `time_format`, `start_of_week`, `default_role`,
+`users_can_register`, `comment_registration`, `show_on_front`, `page_on_front`.
+
+**Not writable — do not claim otherwise to the user:**
+
+- **`default_category`** doesn't exist. A site's default post category cannot be changed.
+- **`default_comment_status` / `default_ping_status`** don't exist. **Comments and pingbacks cannot
+  be disabled through the MCP.** `comment_registration: true` only requires a logged-in account.
+  Point the user at Settings → Discussion in wp-admin.
+- **`users_can_register: false` silently fails.** It returns `success: true` with a
+  `before: true, after: 0` transition and the value stays `true` on read-back. Reproduced twice;
+  probably inert on Simple sites. This is a **false success report** — the strongest possible
+  argument for reading every write back.
+
+A static front page needs the page **published first**; `settings.update` rejects a draft as
+`page_on_front`.
 
 ## Subscription email
 
