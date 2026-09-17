@@ -53,9 +53,6 @@ of them:
   the site. There's no version of agent-driven data entry where this isn't true.
 - **Site visibility is one setting.** Each plugin ships an idempotent setup command that doubles as
   a privacy audit. Re-run it; don't assume.
-- **Attachments may be less private than the site.** Media URL protection on private WordPress.com
-  sites is unverified — see [`docs/wpcom-mcp-notes.md`](docs/wpcom-mcp-notes.md). Redact
-  identifiers before uploading files.
 - **Export is manual.** There's no export operation in the MCP. Use `wordpress.com/export/<site>`
   for a WXR backup.
 
