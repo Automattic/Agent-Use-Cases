@@ -12,7 +12,7 @@ plugin. Everything it does, it does through the WordPress.com MCP server against
 features.
 
 > **Read "What this is not" below before you put real health information into it.** Some of it is
-> legal, some of it is technical, and all of it is load-bearing.
+> legal, some of it is technical.
 
 ## Install
 
@@ -29,20 +29,9 @@ Then:
    browser, you approve, and it carries on. There's no token to create or paste, and nothing to set
    up in `/mcp` first.
 
-**Read this before you approve the authorization.** The grant WordPress.com asks for is
-**account-wide, not site-specific**: sites, posts, media, taxonomy, users, stats, and notifications
-across your whole WordPress.com account. HealthyPress only touches the one site it creates, but the
-permission you're granting is broader than that, and it's issued to a shared Claude Code OAuth
-client rather than to HealthyPress by name — so it won't be obvious which app it belongs to when you
-later review connected applications. If that's not acceptable, use a separate WordPress.com account
-for this.
-
 `/healthypress:setup` **creates a new site** every time you run it without arguments. It won't offer
 to use an existing site, because a dedicated site is what keeps health content out of places it
 shouldn't be. To re-audit a site it already set up, pass it: `/healthypress:setup my-log.wordpress.com`.
-
-Available on all paid WordPress.com plans. **Free sites get 30 days of MCP access from site
-creation** — fine for trying this out, not enough for a long history import.
 
 ## Commands
 
@@ -98,40 +87,7 @@ conditions (diagnosis minus resolution), allergies (latest reaction per allergen
 
 **HIPAA does not apply to this site.** HIPAA covers healthcare providers, insurers, and their
 business associates. It does not cover an individual's own website. Health information you put here
-gets **no legal health-privacy protection** — it's protected like any other content on a hosted
-website, which is to say much less.
-
-Concretely:
-
-- **Automattic staff can access site content**, as with any hosted WordPress.com site.
-- **Hosted content is subject to legal process** — subpoenas, warrants, civil discovery.
-- **Your conversation transcripts contain the same health information.** Every record you log passes
-  through a conversation with Claude, and that transcript is a second copy of your health data,
-  stored somewhere you don't control, under a different policy than the site. This is not a
-  side effect you can turn off — it's inherent to using an agent to do the writing.
-
-### Attachments may not be private
-
-Media URLs on a private WordPress.com site have **not been verified** to require authentication.
-Until that's confirmed on your own site, treat every uploaded file's URL as potentially reachable by
-anyone who has it.
-
-So: **redact before uploading.** Medical record numbers, full date of birth, insurance member IDs,
-street addresses, and account numbers. HealthyPress also renames files to a non-identifying pattern
-(`2026-03-04-lab-1.pdf`) because filenames appear in URLs — but that only protects the filename, not
-the contents.
-
-### You are one setting away from public
-
-Site visibility is a single setting. A plugin, a theme, a support interaction, or a mis-click can
-change it. Nothing in this design prevents that; what it does is make it **checkable**:
-
-- `/healthypress:setup` is idempotent — re-run it whenever you want it re-hardened and re-verified.
-- `/healthypress:review` prints a privacy check every time, and puts any failure at the top.
-- Every health record is created with status `private`, so even a public site doesn't publish the
-  individual records — the derived pages, however, would become visible.
-
-Do both periodically. Privacy here is a thing you maintain, not a thing you set.
+gets **no legal health-privacy protection**.
 
 ### Where the data model breaks down
 
@@ -156,22 +112,6 @@ There is no export operation in the MCP. To get your data out, use the WordPress
 **wordpress.com/export/`<your-site>`** produces a WXR (XML) file containing your posts, pages,
 categories, tags, and media references. It is a complete backup and a useless clinical document —
 no clinician will read it. Do it anyway, periodically, so the record isn't only in one place.
-
-### If any of that is unacceptable
-
-Then don't use this. The honest alternative for someone whose main requirement is privacy is a
-**local encrypted notes file** — an encrypted disk image, a password manager's secure notes, or an
-encrypted notes app — kept on a device you control, with no hosted copy and no agent transcript.
-You lose the derived pages, the searchability, and the care team sharing. You gain actual control.
-
-HealthyPress is the right tool when you want a queryable, shareable, organized health history and
-you've read the above and accepted it.
-
-## See also
-
-`build-with-wordpress` (`Automattic/claude-code-wordpress.com`) in the official marketplace is for
-**building** WordPress.com sites. HealthyPress is about **using** one as an application. They don't
-overlap, and you can install both.
 
 ## Boundaries
 
