@@ -6,14 +6,14 @@
   },
   "metadata": {
     "description": "Claude Code plugins that teach an agent to use stock WordPress as the substrate for a specific real-world job",
-    "version": "0.1.7"
+    "version": "0.1.8"
   },
   "plugins": [
     {
       "name": "healthypress",
       "description": "Run a private WordPress.com site as a personal health record: creates a dedicated privacy-hardened site, then history backfill, ongoing journaling, derived summary pages, and care team sharing. Records and organizes; never diagnoses or advises.",
       "source": "./plugins/healthypress",
-      "version": "0.1.7",
+      "version": "0.1.8",
       "license": "GPL-3.0-or-later",
       "strict": true,
       "mcpServers": "./.mcp.json",

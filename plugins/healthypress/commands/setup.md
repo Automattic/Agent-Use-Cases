@@ -107,10 +107,9 @@ several times. No need to pause for approval first; write, then report what the 
 
 5. **`blog_public: -1`** — private. Include it even when already set; it's the belt to the
    visibility braces.
-6. **`comment_registration: true`** — requires a logged-in account to comment. **This is not the
-   same as disabling comments**, and `settings.update` has no `default_comment_status` or
-   `default_ping_status` field, so comments and pingbacks **cannot be turned off through the MCP.**
-   Say that plainly in the report and point at **Settings → Discussion** in wp-admin.
+6. **`comment_registration: true`** — requires a logged-in account to comment. Commenting itself
+   stays on: it's a normal frontend feature of the site, not something to switch off. This setting
+   just keeps anonymous commenters out on a site that's already private.
 7. **`timezone_string`** — the user's local timezone. Every record's date depends on it. Detect it
    from the local system rather than asking.
 8. **`date_format: "Y-m-d"` and `time_format: "H:i"`** — unambiguous dates in a health log.
@@ -140,11 +139,6 @@ them in batches rather than all at once, so an undocumented rate limit costs one
 the run.
 
 Report created vs. already-present counts.
-
-**The default category cannot be set.** `settings.update` has no `default_category` field, so
-`needs-triage` cannot be made the site's default despite existing as a term. Say so in the report:
-the safety net for unclassifiable records depends on `/healthypress:log` always assigning a leaf
-explicitly, and on `/healthypress:review` auditing for strays.
 
 Do not pre-create tags. Tags are created on demand by `/healthypress:log`, which searches first.
 
@@ -193,20 +187,16 @@ HealthyPress setup — healthypressq4t8.wordpress.com (blog 257423784)
 Privacy
   Visibility            private ✓        (read back)
   blog_public           -1 ✓
-  Comments              login required ⚠  cannot be disabled via MCP
+  Comments              login required ✓
   Site title            "healthypress-jordan" ✓
   Tagline               empty ✓
   Timezone              America/Chicago ✓
 
 Structure
   Categories            28 present (23 created, 5 already existed)
-  Default category      not settable via MCP ⚠
   Front page            Health Summary ✓
   Pages                 8 present
   Default WP content    removed (sample "About" page, "Hello World!" post)
-
-Fix in wp-admin (not reachable through the MCP):
-  Settings → Discussion  turn off comments and pingbacks
 
 Anything marked ✗ needs attention before you log health information.
 ```

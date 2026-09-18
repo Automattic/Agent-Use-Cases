@@ -2,6 +2,20 @@
 
 All notable changes to HealthyPress are documented here.
 
+## 0.1.8 — 2026-09-18
+
+### Removed
+
+- **`/healthypress:setup` no longer suggests disabling comments.** Commenting is a normal frontend
+  feature of the site, not something the command should point users toward turning off. The
+  `comment_registration: true` setting stays (it just keeps anonymous commenters out on an
+  already-private site), but the instruction to point at Settings → Discussion in wp-admin, and the
+  "Fix in wp-admin" block in the example privacy report, are gone.
+- **Dropped the "default category cannot be set" note and report line.** The `needs-triage` safety
+  net for unclassifiable records already depends on `/healthypress:log` always assigning a leaf
+  explicitly and on `/healthypress:review` auditing for strays — neither depends on setup
+  announcing the gap, so it's no longer called out as a warning.
+
 ## 0.1.7 — 2026-09-18
 
 ### Changed
