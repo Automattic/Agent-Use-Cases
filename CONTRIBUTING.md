@@ -8,13 +8,8 @@ A use case is a real-world job someone does with a WordPress site. Not a feature
 job, with a setup procedure, a daily driver, and a content model. If you can't name the job in a
 sentence ("run a private site as a personal health record"), it isn't a use case yet.
 
-Start by copying the skeleton:
-
-```
-cp -R docs/use-case-template plugins/<your-use-case>
-```
-
-Nothing in `docs/` is registered with the marketplace, so the template is inert until you copy it.
+Start by creating `plugins/<your-use-case>/` with the same shape as `plugins/healthypress`:
+`README.md`, `CHANGELOG.md`, `.mcp.json`, `commands/*.md`, `skills/<skill>/SKILL.md`.
 
 ## Register every component path
 
@@ -54,7 +49,7 @@ The WordPress.com MCP uses a facade pattern — a handful of tools, each taking 
 
 So: skills and commands **teach discovery**. They say "`describe` this operation before its first
 use, then pass exactly the parameters the live schema names." They never list parameter names as if
-they were a contract — including parameter names copied out of `docs/wpcom-mcp-notes.md`.
+they were a contract.
 
 Related: **read writes back.** A parameter the schema doesn't recognize can be silently dropped
 rather than rejected, so success responses aren't evidence. Verify the stored state.
@@ -139,5 +134,3 @@ deduplicates them is not.
    ```
    Then check `/help` lists every command, the skills are listed, and `/mcp` connects `wpcom`.
 4. Run the whole flow **against a scratch site**, never a real one. Then delete the scratch site.
-5. If you discovered something about the MCP along the way, put it in `docs/wpcom-mcp-notes.md` —
-   marked **verified** with the date and how you checked, or left in the open-questions table.

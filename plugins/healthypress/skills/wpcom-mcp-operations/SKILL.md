@@ -93,8 +93,8 @@ Commands that call these tools must list `authenticate` and `complete_authentica
   **Preferences → AI and MCP**. If facade calls fail with an authorization error *after* a
   successful handshake, that's the setting to point at.
 - Available on all paid plans. **Free sites get 30 days from site creation** (whether the clock
-  starts at creation or at first MCP use is unverified — see `docs/wpcom-mcp-notes.md` in the repo).
-  Warn before starting any long, multi-session project on a free site.
+  starts at creation or at first MCP use is unverified). Warn before starting any long,
+  multi-session project on a free site.
 - Tool availability also respects the connected user's WordPress role. An operation missing from
   `list` may be a permissions artifact rather than a server change — check the role before concluding
   the feature is gone.

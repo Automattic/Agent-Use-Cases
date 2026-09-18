@@ -43,16 +43,14 @@ MCP is available on all paid WordPress.com plans. **Free sites get 30 days from 
 ```
 .claude-plugin/marketplace.json   every plugin, skill, and command declared inline
 plugins/<name>/                   one plugin = one use case
-docs/use-case-template/           copy-me skeleton for a new use case
-docs/wpcom-mcp-notes.md           shared field notes on the WordPress.com MCP
 CONTRIBUTING.md                   how to add use case #2
 CLAUDE.md                         conventions for agents working in this repo
 ```
 
 ## Adding a use case
 
-Copy `docs/use-case-template/`, register every component path in
-`.claude-plugin/marketplace.json`, and read [`CONTRIBUTING.md`](CONTRIBUTING.md) first — it covers
+Create `plugins/<your-use-case>/` and register every component path in
+`.claude-plugin/marketplace.json`. Read [`CONTRIBUTING.md`](CONTRIBUTING.md) first — it covers
 the core-only rule, the runtime-schema-discovery rule, and why some text in this repo is duplicated
 on purpose.
 

@@ -31,9 +31,9 @@ short page, so counts are real. Listings return dates and excerpts, so this is c
 full posts for the hygiene checks that need the body.
 
 Build reporting on **post listings plus taxonomy filters**, not on content search: whether search
-covers non-public posts, and whether it can filter by category or tag, is unverified (see
-`docs/wpcom-mcp-notes.md`). If a search-based shortcut would be faster, verify it returns private
-posts on this site before trusting it.
+covers non-public posts, and whether it can filter by category or tag, is unverified. If a
+search-based shortcut would be faster, verify it returns private posts on this site before trusting
+it.
 
 ## Step 2: The factual report
 

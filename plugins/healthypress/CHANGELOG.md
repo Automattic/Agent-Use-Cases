@@ -2,6 +2,15 @@
 
 All notable changes to HealthyPress are documented here.
 
+## 0.1.5 — 2026-09-18
+
+### Removed
+
+- **The repo-wide `docs/` directory is gone**, including `docs/wpcom-mcp-notes.md` (the shared
+  verified/open-questions log) and `docs/use-case-template/`. References to it in
+  `wpcom-mcp-operations` and `/healthypress:review` were trimmed to drop the dead pointer while
+  keeping the underlying unverified-behavior caveats.
+
 ## 0.1.4 — 2026-09-17
 
 ### Removed

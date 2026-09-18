@@ -15,8 +15,6 @@ plugins/<name>/                   one plugin = one use case
   README.md  CHANGELOG.md  .mcp.json
   commands/*.md                   user-invoked procedures
   skills/<skill>/SKILL.md         knowledge, ~100 lines, bulk in references/
-docs/use-case-template/           inert copy-me skeleton — not registered, don't "fix" that
-docs/wpcom-mcp-notes.md           shared MCP field notes: verified facts and open questions
 ```
 
 ## Rules that bite
@@ -32,7 +30,7 @@ working around it.
 **Never hardcode an MCP facade schema.** The WordPress.com MCP uses facade tools taking an
 `operation` plus `action: list` / `action: describe`, and the docs say schemas evolve and the live
 `describe` response is the source of truth. Skills teach discovery. Don't copy parameter names out
-of documentation — including out of `docs/wpcom-mcp-notes.md` — and present them as a contract.
+of documentation and present them as a contract.
 
 **Both tool-name prefixes in `allowed-tools`.** Plugin-scoped MCP servers get renamed, so every
 command must list `mcp__wpcom__<facade>` **and** `mcp__plugin_<plugin>_wpcom__<facade>`.
@@ -45,10 +43,6 @@ every copy in the same commit and verify they're byte-identical.
 
 **`wpcom-mcp-operations` is copied between plugins, not shared.** Plugin sources can't share
 directories. Copy it verbatim; don't fork or trim it.
-
-**Unverified is a state you write down.** `docs/wpcom-mcp-notes.md` has exactly two states per
-claim: verified, with the date and method, or open. Don't promote an assumption to a fact because
-the design depends on it — that's precisely when it needs the marker.
 
 ## Editing prose here
 
