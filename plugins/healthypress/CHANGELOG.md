@@ -2,6 +2,44 @@
 
 All notable changes to HealthyPress are documented here.
 
+## 0.1.7 — 2026-09-18
+
+### Changed
+
+- **`/healthypress:setup` asks for a memorable site name instead of generating a random one.** Step
+  2 now asks the user for a short word (first name, nickname, etc.) and builds
+  `healthypress-<word>` as both the title and the derived URL slug, rather than
+  `healthypress-<4 random chars>`.
+- **Added an explicit approval pause before site creation.** The command shows the proposed title
+  and the `would_be_url` from `subdomain.check` and waits for a yes before calling
+  `site.provision`. It is the only approval pause in the command — everything from provisioning
+  through the end of the privacy gate still runs without further pauses.
+- Removed the now-stale "keep the title neutral/dull" guidance and the step-4 rule that rewrote
+  `blogname` if it looked identifying, since an identifying, memorable title is now the intended
+  default. The agent is instructed to say the memorable-vs-identifying trade-off out loud once,
+  before the user picks a word.
+
+## 0.1.6 — 2026-09-18
+
+### Removed
+
+- **`/healthypress:setup` no longer attempts `users_can_register: false`.** It was a known
+  false-success write on Simple sites anyway; registration is left at the WordPress.com default.
+- **Approval gates dropped from the settings-hardening batch and the category-creation batch.**
+  Both still pass `user_confirmed: true` on every write (the facade requires it), but the command no
+  longer pauses to show the field/category list and wait for a yes first.
+
+### Added
+
+- **`/healthypress:setup` now trashes WordPress's own default placeholder content** — the sample
+  "About" page ("This is an example of a page...") and the "Hello World!" post that WordPress.com
+  creates on every new site — before printing the privacy report.
+
+### Changed
+
+- **The generated site-name base changed from `personal-log` to `healthypress`** (e.g.
+  `healthypress-<4 random chars>`).
+
 ## 0.1.5 — 2026-09-18
 
 ### Removed

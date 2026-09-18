@@ -55,11 +55,19 @@ Create a new site. Do not list the user's sites and do not ask them to choose on
 is the whole point, and picking an existing one is how health content ends up somewhere it
 shouldn't be.
 
-`describe` then call the provisioning operation on `wpcom-mcp-create-site`. For the name: generate a
-neutral, non-identifying one (`personal-log-<4 random chars>` is fine) rather than asking. Do not
-pick anything clever or descriptive — site names appear in URLs, search results, and link previews.
-The display title gets set to something neutral during the privacy gate and can be changed
-later; the URL is forever, so keep it dull.
+Ask the user for a short word to make the name memorable — a first name, nickname, or anything
+else they'd recognize (it does not need to be their real WordPress.com username). Combine it as
+`healthypress-<word>` for both the display title and the derived URL slug.
+
+`describe` then call the provisioning operation on `wpcom-mcp-create-site`. Derive the subdomain
+slug from `healthypress-<word>` using the tool's own derivation rule (lowercase, strip diacritics,
+remove non-alphanumeric), then call `subdomain.check`. If the slug is taken, tell the user and ask
+for a different word, or offer the numeric-suffixed slug WordPress.com proposes instead.
+
+**Get explicit approval before provisioning.** Show the user the proposed title and the exact
+`would_be_url` from `subdomain.check`, and wait for a yes before calling `site.provision`. This is
+the one approval pause in this command — once they say go, everything from provisioning through the
+end of the privacy gate runs without further pauses.
 
 Tell the user the site was created and that you are now making it private — then do that
 immediately. The privacy gate in step 4 must run in the same turn. Do not hand the user a site URL
@@ -93,28 +101,21 @@ Run in this order, and treat the **read-back** as the only evidence:
 
    Do not proceed. Do not create pages or posts.
 
-Then harden the rest. Batch these into **one** `settings.update` call with `user_confirmed: true`,
-after showing the user the field list and getting a single approval — the facade requires
-confirmation per write operation, so one call means one approval instead of six:
+Then harden the rest. Batch these into **one** `settings.update` call with `user_confirmed: true` —
+the facade requires that flag per write operation, so one call means setting it once instead of
+several times. No need to pause for approval first; write, then report what the read-back shows.
 
 5. **`blog_public: -1`** — private. Include it even when already set; it's the belt to the
    visibility braces.
-6. **`users_can_register: false`** — a private WordPress.com site is visible to site members, so
-   open registration is worth closing. **Known issue: this write does not stick.** It returns
-   `success` with a `before/after` transition and the value stays `true` on read-back. Most likely
-   the option is inert on Simple WordPress.com sites, where accounts are account-level rather than
-   site-level. Attempt it, then **report whatever the read-back actually says** — never report it as
-   closed on the strength of the write response.
-7. **`comment_registration: true`** — requires a logged-in account to comment. **This is not the
+6. **`comment_registration: true`** — requires a logged-in account to comment. **This is not the
    same as disabling comments**, and `settings.update` has no `default_comment_status` or
    `default_ping_status` field, so comments and pingbacks **cannot be turned off through the MCP.**
    Say that plainly in the report and point at **Settings → Discussion** in wp-admin.
-8. **`timezone_string`** — the user's local timezone. Every record's date depends on it. Detect it
+7. **`timezone_string`** — the user's local timezone. Every record's date depends on it. Detect it
    from the local system rather than asking.
-9. **`date_format: "Y-m-d"` and `time_format: "H:i"`** — unambiguous dates in a health log.
-10. **Site title and tagline.** A new site already carries the neutral title chosen at step 2 and an
-    empty tagline, so normally there is nothing to do. Only write `blogname` if the existing title
-    names a person or a condition, and say so in the report.
+8. **`date_format: "Y-m-d"` and `time_format: "H:i"`** — unambiguous dates in a health log.
+9. **Site title and tagline.** A new site already carries the title chosen at step 2 and an empty
+   tagline, so normally there is nothing to do here.
 
 ## Step 5: Create the taxonomy
 
@@ -134,9 +135,9 @@ Create the categories from `health-content-model` — the full closed list is in
 5. Give each container a `description` saying it is a container and must never be assigned directly.
 
 **Confirmation and pacing.** Every create is a separate write requiring `user_confirmed: true`; the
-flag does not carry across calls. So show the user the list **once**, take **one** approval, then
-issue the writes with the flag set on each. Send them in batches rather than all at once, so an
-undocumented rate limit costs one batch instead of the run.
+flag does not carry across calls, so set it on each one — no need to pause for approval first. Send
+them in batches rather than all at once, so an undocumented rate limit costs one batch instead of
+the run.
 
 Report created vs. already-present counts.
 
@@ -173,20 +174,27 @@ reverse-chronological order as the first thing anyone sees.
 self-entered and not a medical record, that HIPAA does not apply to it, the model in two sentences
 (posts are events, pages are derived), and the Boundaries block below.
 
+Every new site also comes with WordPress's own default placeholder content: a page titled "About"
+(content starting "This is an example of a page...") and a post titled "Hello World!". These are
+not HealthyPress content and have nothing to do with the About This Site page above — **trash
+both** before moving on (`pages.delete` / `posts.delete` only move to trash via the MCP; that's
+fine, no need for a permanent purge). Find them by listing pages and posts and matching the default
+title/slug (`about` / `hello-world`), and confirm the page's content still contains "This is an
+example of a page" before trashing it — don't delete on title alone.
+
 ## Step 7: Print the privacy report
 
 Show the user a report they can actually verify, with the **read-back** value for each line — not
 the value you asked for. Mark anything that couldn't be verified or couldn't be set:
 
 ```
-HealthyPress setup — personallogq4t8.wordpress.com (blog 257423784)
+HealthyPress setup — healthypressq4t8.wordpress.com (blog 257423784)
 
 Privacy
   Visibility            private ✓        (read back)
   blog_public           -1 ✓
-  Registration open     yes ✗            write does not persist — see below
   Comments              login required ⚠  cannot be disabled via MCP
-  Site title            "Personal Log q4t8" (neutral) ✓
+  Site title            "healthypress-jordan" ✓
   Tagline               empty ✓
   Timezone              America/Chicago ✓
 
@@ -195,10 +203,10 @@ Structure
   Default category      not settable via MCP ⚠
   Front page            Health Summary ✓
   Pages                 8 present
+  Default WP content    removed (sample "About" page, "Hello World!" post)
 
 Fix in wp-admin (not reachable through the MCP):
   Settings → Discussion  turn off comments and pingbacks
-  Settings → General     confirm membership/registration is closed
 
 Anything marked ✗ needs attention before you log health information.
 ```
