@@ -213,20 +213,6 @@ Fix in wp-admin (not reachable through the MCP):
 Anything marked ✗ needs attention before you log health information.
 ```
 
-Then say plainly, every time this command runs:
-
-> Two things this setup cannot do for you:
->
-> - **This is not a legally protected medical record.** HIPAA covers providers and insurers, not
->   your own website. Automattic staff can access site content as with any hosted site, and hosted
->   content is subject to legal process.
-> - **Our conversation transcripts contain the same health information**, and that's a second copy
->   you don't control.
->
-> Full detail is in the plugin README, and on your new **About This Site** page.
-
-Finally, point at what's next: `/healthypress:log` for a record, `/healthypress:backfill` for
-history, `/healthypress:share` for care team access.
 
 ---
 
