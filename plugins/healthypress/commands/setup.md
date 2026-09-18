@@ -116,13 +116,6 @@ confirmation per write operation, so one call means one approval instead of six:
     empty tagline, so normally there is nothing to do. Only write `blogname` if the existing title
     names a person or a condition, and say so in the report.
 
-Then, separately from the settings write:
-
-11. **Newsletter.** Read the newsletter status and **verify the subscriber count is zero**. A fresh
-    site reports `total: 0` and `has_active_subscribers: false`, which is the expected state and
-    needs no write. If there *are* subscribers, list them and stop to ask before any content exists.
-    Only call the newsletter settings update if subscription email is actually enabled.
-
 **Not settable through the MCP — state these as gaps in the report, don't pretend otherwise:**
 
 - **The default post category.** `settings.update` has no `default_category` field, so
@@ -203,7 +196,6 @@ Privacy
   blog_public           -1 ✓
   Registration open     yes ✗            write does not persist — see below
   Comments              login required ⚠  cannot be disabled via MCP
-  Newsletter email      no sends, 0 subscribers ✓
   Site title            "Personal Log q4t8" (neutral) ✓
   Tagline               empty ✓
   Timezone              America/Chicago ✓

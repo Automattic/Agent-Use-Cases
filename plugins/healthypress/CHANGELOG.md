@@ -2,6 +2,16 @@
 
 All notable changes to HealthyPress are documented here.
 
+## 0.1.4 — 2026-09-17
+
+### Removed
+
+- **Newsletter/subscription email is no longer treated as a privacy gate.** `/healthypress:setup`
+  dropped the step that verified zero subscribers and disabled subscription email;
+  `/healthypress:review`'s privacy check dropped the "Newsletter email" and "Subscribers" lines and
+  no longer flags them as out of posture. A private site already limits who can see or subscribe to
+  it, and an invited care team member may want the notifications.
+
 ## 0.1.3 — 2026-09-17
 
 ### Removed

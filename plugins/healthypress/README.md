@@ -36,7 +36,7 @@ existing site, because a dedicated site is what keeps health content out of plac
 
 | Command | What it does |
 |---|---|
-| `/healthypress:setup` | Creates a new site, then runs the **privacy gate** — set Private, verify, discourage search engines, disable comments and newsletter email, verify zero subscribers, neutral title, timezone — then creates the taxonomy and the pages and prints a privacy report. Stops hard if the site can't be made Private. |
+| `/healthypress:setup` | Creates a new site, then runs the **privacy gate** — set Private, verify, discourage search engines, disable comments, neutral title, timezone — then creates the taxonomy and the pages and prints a privacy report. Stops hard if the site can't be made Private. |
 | `/healthypress:log` | The daily driver. One event in, one private post out: interview, classify, resolve tags, compute the date, compose, read the whole record back for confirmation, save, attach files, refresh the affected pages. |
 | `/healthypress:backfill` | Guided history intake, era by era and system by system. Checkpoints every ~10 records, keeps a resumable captured list, never re-asks about a declined topic, regenerates all pages once at the end. Warns about the free-plan 30-day cliff before starting. |
 | `/healthypress:share` | Care team access. Only runs on a Private site. Invites as **Editor** (full read of the whole timeline — and, unavoidably, edit and trash rights) or **Viewer** (read-only, published pages only), in plain language about the tradeoff. Also lists, changes, and revokes. |

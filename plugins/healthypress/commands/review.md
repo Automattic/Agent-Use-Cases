@@ -108,14 +108,12 @@ Privacy
   blog_public        -1 ✓
   Search engines     Discouraged ✓
   Comments           Off ✓
-  Newsletter email   Off ✓
-  Subscribers        0 ✓
   Users              you (Administrator); dana@example.com (Editor); 1 pending invite
 ```
 
-If **anything** is off — visibility not Private, subscribers present, a public post, newsletter
-enabled — put it at the **top** of the whole report, before the counts, and say what to run:
-`/healthypress:setup` to re-harden, `/healthypress:share list` to review people.
+If **anything** is off — visibility not Private, or a public post — put it at the **top** of the
+whole report, before the counts, and say what to run: `/healthypress:setup` to re-harden,
+`/healthypress:share list` to review people.
 
 ## Step 5: Close
 

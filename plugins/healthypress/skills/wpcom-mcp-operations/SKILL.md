@@ -186,14 +186,6 @@ public), `timezone_string`, `date_format`, `time_format`, `start_of_week`, `defa
 A static front page needs the page **published first**; `settings.update` rejects a draft as
 `page_on_front`.
 
-## Subscription email
-
-WordPress.com emails new posts to subscribers. Three independent layers, because any one can fail:
-
-1. Disable newsletter / subscription email in site settings.
-2. Verify the subscriber count is zero.
-3. Create sensitive posts with a non-public status, which doesn't trigger subscription email.
-
 ## Deletes
 
 - Post deletion is a **30-day trash**, not a delete. Content still exists on the server. Tell the
