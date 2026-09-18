@@ -116,16 +116,6 @@ confirmation per write operation, so one call means one approval instead of six:
     empty tagline, so normally there is nothing to do. Only write `blogname` if the existing title
     names a person or a condition, and say so in the report.
 
-**Not settable through the MCP — state these as gaps in the report, don't pretend otherwise:**
-
-- **The default post category.** `settings.update` has no `default_category` field, so
-  `needs-triage` cannot be made the site default even though step 5 creates it as a term. Records
-  therefore rely on `/healthypress:log` always assigning a category explicitly, and on
-  `/healthypress:review` auditing for strays.
-- **Comments and pingbacks off.** See item 7.
-- **Search-engine discouragement as its own setting.** It's the `blog_public: 0` state, which is
-  *public*. `private` (`-1`) is strictly stronger, so this is moot on a HealthyPress site.
-
 ## Step 5: Create the taxonomy
 
 Create the categories from `health-content-model` — the full closed list is in that skill's
