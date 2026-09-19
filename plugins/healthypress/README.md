@@ -32,9 +32,12 @@ Then:
 `/healthypress:setup` **creates a new site** every time you run it. It won't offer to use an
 existing site, because a dedicated site is what keeps health content out of places it shouldn't be.
 
-## Commands
+## Skills
 
-| Command | What it does |
+Everything here is a skill. Invoke the five below directly with the slash form, or just describe
+what you want in plain language and the right one loads on its own.
+
+| Skill | What it does |
 |---|---|
 | `/healthypress:setup` | Creates a new site, then runs the **privacy gate** — set Private, verify, discourage search engines, disable comments, neutral title, timezone — then creates the taxonomy and the Health Summary page and prints a privacy report. Stops hard if the site can't be made Private. |
 | `/healthypress:log` | The daily driver. One event in, one private post out: interview, classify, resolve tags, compute the date, compose, read the whole record back for confirmation, save, attach files. |
@@ -42,9 +45,8 @@ existing site, because a dedicated site is what keeps health content out of plac
 | `/healthypress:share` | Care team access. Only runs on a Private site. Invites as **Editor** (full read of the whole timeline — and, unavoidably, edit and trash rights) or **Viewer** (read-only, published content only), in plain language about the tradeoff. Also lists, changes, and revokes. |
 | `/healthypress:review` | Read-only factual report — counts, frequencies, co-occurrences, gaps — plus a hygiene audit (near-duplicate tags, missing required fields, untriaged posts, drafts) and a privacy check. Never interprets. |
 
-## Skills
-
-These load on their own when the topic comes up; you don't invoke them.
+Two more skills carry reference knowledge rather than a workflow. They load on their own when the
+topic comes up; you don't invoke them directly.
 
 | Skill | Content |
 |---|---|

@@ -1,10 +1,7 @@
 ---
-description: Record one health event — interview, classify, tag, date, compose, confirm, save as private
+name: log
+description: Record one health event — interview, classify, tag, date, compose, confirm, save as private. Use whenever the user wants to log, record, or file a health event (a symptom, visit, lab result, medication change, diagnosis) on a site that already has HealthyPress set up.
 allowed-tools: mcp__wpcom__wpcom-mcp-site, mcp__wpcom__wpcom-mcp-content-authoring, mcp__plugin_healthypress_wpcom__wpcom-mcp-site, mcp__plugin_healthypress_wpcom__wpcom-mcp-content-authoring, mcp__wpcom__authenticate, mcp__wpcom__complete_authentication, mcp__plugin_healthypress_wpcom__authenticate, mcp__plugin_healthypress_wpcom__complete_authentication, AskUserQuestion, Read, Skill, Bash
-arguments:
-  - name: entry
-    description: What happened, in your own words (e.g. "saw Dr. Okafor today about the echo"). If omitted, you will be asked.
-    required: false
 ---
 
 # Log a Health Record
@@ -46,7 +43,8 @@ Note the site timezone; every date below is in site-local time.
 
 ## Step 2: Get the event
 
-Use the `entry` argument if given. Otherwise ask, once, openly: "What would you like to record?"
+If invoked with `args`, treat that text as what happened, in the user's own words. Otherwise ask,
+once, openly: "What would you like to record?"
 
 Capture their words verbatim before doing anything else — that text becomes `## Summary`, in quotes.
 Then ask **one question at a time** for only the required `## Details` keys the record type needs
@@ -141,4 +139,4 @@ offer to log another.
 
 ---
 
-This command records and files what the user tells it. It does not interpret findings or advise.
+This skill records and files what the user tells it. It does not interpret findings or advise.

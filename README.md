@@ -41,7 +41,7 @@ MCP is available on all paid WordPress.com plans. **Free sites get 30 days from 
 ## Repository layout
 
 ```
-.claude-plugin/marketplace.json   every plugin, skill, and command declared inline
+.claude-plugin/marketplace.json   every plugin and skill declared inline
 plugins/<name>/                   one plugin = one use case
 CONTRIBUTING.md                   how to add use case #2
 CLAUDE.md                         conventions for agents working in this repo

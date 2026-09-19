@@ -2,6 +2,22 @@
 
 All notable changes to HealthyPress are documented here.
 
+## 0.1.10 — 2026-09-19
+
+### Changed
+
+- **`setup`, `log`, `backfill`, `share`, and `review` are now skills, not slash commands.** The
+  files moved from `commands/*.md` to `skills/<name>/SKILL.md`, and `marketplace.json` lists all
+  seven skills under a single `skills` array — the `commands` array is gone.
+- **They still run via `/healthypress:setup` and friends** — a skill named `setup` responds to the
+  same slash form a command did — but they can now also trigger from plain language ("log my
+  headache", "set up a private health site") the way `health-content-model` and
+  `wpcom-mcp-operations` already did.
+- **Named arguments became a single freeform `args` string.** `log`'s `entry`, `review` and
+  `backfill`'s `scope`, and `share`'s `action`/`email` are no longer declared frontmatter
+  arguments; each skill now reads whatever free text `args` carries (or asks, if it's omitted) at
+  the point it used to read its argument.
+
 ## 0.1.9 — 2026-09-19
 
 ### Removed

@@ -1,11 +1,12 @@
 ---
-description: Create a new private WordPress.com site as a personal health record — privacy gate first, then taxonomy and the Health Summary page.
+name: setup
+description: Create a new private WordPress.com site as a personal health record — privacy gate first, then taxonomy and the Health Summary page. Use when the user wants to start a private health journal, set up HealthyPress, or create a dedicated site for tracking their health.
 allowed-tools: mcp__wpcom__wpcom-mcp-site, mcp__wpcom__wpcom-mcp-create-site, mcp__wpcom__wpcom-mcp-content-authoring, mcp__wpcom__wpcom-mcp-user-management, mcp__wpcom__authenticate, mcp__wpcom__complete_authentication, mcp__plugin_healthypress_wpcom__wpcom-mcp-site, mcp__plugin_healthypress_wpcom__wpcom-mcp-create-site, mcp__plugin_healthypress_wpcom__wpcom-mcp-content-authoring, mcp__plugin_healthypress_wpcom__wpcom-mcp-user-management, mcp__plugin_healthypress_wpcom__authenticate, mcp__plugin_healthypress_wpcom__complete_authentication, AskUserQuestion, Bash, Skill
 ---
 
 # Set Up HealthyPress
 
-**This command always creates a brand new private WordPress.com site.** It never asks you to pick
+**This skill always creates a brand new private WordPress.com site.** It never asks you to pick
 from your existing sites, and it never writes health structure onto a site that has other things on
 it.
 
@@ -66,12 +67,12 @@ for a different word, or offer the numeric-suffixed slug WordPress.com proposes 
 
 **Get explicit approval before provisioning.** Show the user the proposed title and the exact
 `would_be_url` from `subdomain.check`, and wait for a yes before calling `site.provision`. This is
-the one approval pause in this command — once they say go, everything from provisioning through the
+the one approval pause in this skill — once they say go, everything from provisioning through the
 end of the privacy gate runs without further pauses.
 
 Tell the user the site was created and that you are now making it private — then do that
 immediately. The privacy gate in step 4 must run in the same turn. Do not hand the user a site URL
-and finish; skipping the immediate privacy gate is the most dangerous thing this command could do.
+and finish; skipping the immediate privacy gate is the most dangerous thing this skill could do.
 
 ## Step 3: Check the plan and the MCP clock
 
@@ -195,4 +196,4 @@ Anything marked ✗ needs attention before you log health information.
 
 ---
 
-This command configures a site. It does not record, interpret, or advise on health information.
+This skill configures a site. It does not record, interpret, or advise on health information.

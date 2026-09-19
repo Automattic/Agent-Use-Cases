@@ -1,17 +1,14 @@
 ---
-description: Read-only factual report on what's in the health record, plus a data-hygiene and privacy audit — counts and patterns, never interpretation
+name: review
+description: Read-only factual report on what's in the health record, plus a data-hygiene and privacy audit — counts and patterns, never interpretation. Use when the user wants a summary, report, audit, or overview of what has been logged, or wants to check the site's privacy or data-hygiene status.
 allowed-tools: mcp__wpcom__wpcom-mcp-site, mcp__wpcom__wpcom-mcp-content-authoring, mcp__wpcom__wpcom-mcp-user-management, mcp__plugin_healthypress_wpcom__wpcom-mcp-site, mcp__plugin_healthypress_wpcom__wpcom-mcp-content-authoring, mcp__plugin_healthypress_wpcom__wpcom-mcp-user-management, mcp__wpcom__authenticate, mcp__wpcom__complete_authentication, mcp__plugin_healthypress_wpcom__authenticate, mcp__plugin_healthypress_wpcom__complete_authentication, Read, Skill, Bash
-arguments:
-  - name: scope
-    description: What to report on — a tag, category, date range, or "hygiene" for just the audit. If omitted, reports on everything.
-    required: false
 ---
 
 # Review the Health Record
 
 A factual report over what has been logged, and an audit of the record's own integrity. **This
-command writes nothing.** It fixes nothing on its own — it tells the user what it found and offers
-the command that would fix it.
+skill writes nothing.** It fixes nothing on its own — it tells the user what it found and offers
+the skill that would fix it.
 
 Load `health-content-model` and `wpcom-mcp-operations` before step 1.
 
@@ -25,8 +22,9 @@ land. Don't send the user off to configure anything — do it for them.
 
 ## Step 1: Read the record
 
-Page through post listings with the taxonomy filters the `scope` argument implies — all the way to a
-short page, so counts are real. Listings return dates and excerpts, so this is cheap; only fetch
+Page through post listings with the taxonomy filters implied by `args` (a tag, category, date
+range, or "hygiene" for just the audit; report on everything if `args` is omitted) — all the way to
+a short page, so counts are real. Listings return dates and excerpts, so this is cheap; only fetch
 full posts for the hygiene checks that need the body.
 
 Build reporting on **post listings plus taxonomy filters**, not on content search: whether search
@@ -64,7 +62,7 @@ Rules for this section, without exception:
 
 - A count, a date, a frequency, a co-occurrence, or a gap. Nothing else.
 - "9 of 12 migraines logged fell on a weekday" is allowed. "Your migraines may be work-related" is
-  not — that's a hypothesis, and this command doesn't make them.
+  not — that's a hypothesis, and this skill doesn't make them.
 - Never call a value or a trend high, low, normal, improving, worsening, or concerning.
 - Never rank causes, never suggest a next test, never suggest a conversation topic beyond offering to
   assemble records.
@@ -114,8 +112,8 @@ whole report, before the counts, and say what to run: `/healthypress:setup` to r
 ## Step 5: Close
 
 Summarize in a sentence: how many records, how many hygiene items, whether privacy is clean. Offer
-the fixes as commands the user can run. Do not run them.
+the fixes as skills the user can run. Do not run them.
 
 ---
 
-This command reports facts about what was logged. It does not interpret them or advise.
+This skill reports facts about what was logged. It does not interpret them or advise.

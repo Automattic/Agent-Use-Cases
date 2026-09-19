@@ -1,13 +1,7 @@
 ---
-description: Give a care team member access to the private health site, or change and revoke that access — private sites only
+name: share
+description: Give a care team member access to the private health site, or change and revoke that access — private sites only. Use when the user wants to invite, share with, remove, or change access for a doctor, family member, or caregiver.
 allowed-tools: mcp__wpcom__wpcom-mcp-site, mcp__wpcom__wpcom-mcp-user-management, mcp__plugin_healthypress_wpcom__wpcom-mcp-site, mcp__plugin_healthypress_wpcom__wpcom-mcp-user-management, mcp__wpcom__authenticate, mcp__wpcom__complete_authentication, mcp__plugin_healthypress_wpcom__authenticate, mcp__plugin_healthypress_wpcom__complete_authentication, AskUserQuestion, Skill, Bash
-arguments:
-  - name: action
-    description: What to do — "invite", "list", "change", "revoke". If omitted, you will be asked.
-    required: false
-  - name: email
-    description: Email address of the person, for invite / change / revoke.
-    required: false
 ---
 
 # Share with Your Care Team
@@ -38,8 +32,9 @@ List site users and pending invites. Show, for each: name or email, role, and wh
 accepted or still pending. If there are pending invites older than a week, point them out — a
 forgotten pending invite is an open door.
 
-If `action` wasn't given, ask with `AskUserQuestion` what they want to do: invite someone · change a
-role · revoke access · cancel or resend a pending invite · nothing, just looking.
+If `args` gives an action (invite / list / change / revoke) or an email, use it. Otherwise ask with
+`AskUserQuestion` what they want to do: invite someone · change a role · revoke access · cancel or
+resend a pending invite · nothing, just looking.
 
 ## Step 3: Invite — explain the role honestly, first
 
@@ -103,5 +98,5 @@ Once per run, whether or not anything changed:
 
 ---
 
-This command manages access to a site. It does not record, interpret, or advise on health
+This skill manages access to a site. It does not record, interpret, or advise on health
 information.

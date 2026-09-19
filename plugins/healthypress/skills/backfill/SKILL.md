@@ -1,10 +1,7 @@
 ---
-description: Guided intake of past health history — era by era, system by system, with checkpoints and a resumable captured list
+name: backfill
+description: Guided intake of past health history — era by era, system by system, with checkpoints and a resumable captured list. Use when the user wants to backfill, import, or walk through their past health history rather than log a single new event.
 allowed-tools: mcp__wpcom__wpcom-mcp-site, mcp__wpcom__wpcom-mcp-content-authoring, mcp__plugin_healthypress_wpcom__wpcom-mcp-site, mcp__plugin_healthypress_wpcom__wpcom-mcp-content-authoring, mcp__wpcom__authenticate, mcp__wpcom__complete_authentication, mcp__plugin_healthypress_wpcom__authenticate, mcp__plugin_healthypress_wpcom__complete_authentication, AskUserQuestion, Read, Skill, Bash
-arguments:
-  - name: scope
-    description: Where to start or resume (e.g. "medications", "the 2010s", "resume"). If omitted, you will be asked.
-    required: false
 ---
 
 # Backfill Health History
@@ -62,8 +59,9 @@ stopped medications · pregnancies · screenings.
 Tell them up front: one question at a time, "I don't know" is a fine answer, and they can stop at
 any point without losing what's been captured.
 
-If `scope` is `resume`, find the captured list from the previous session (step 4) and pick up where
-it left off.
+If `args` is `resume`, find the captured list from the previous session (step 4) and pick up where
+it left off. Otherwise use `args` (e.g. "medications", "the 2010s"), if given, to set where to
+start — or ask if it wasn't given.
 
 ## Step 3: Work one record at a time
 
@@ -119,7 +117,7 @@ only** — read the section, add to it, and leave the rest of the page exactly a
 
 HealthyPress does not generate or regenerate the Health Summary page. If the user wants it brought
 up to date with everything just captured, they can ask — that's an ordinary request, not part of
-this command.
+this skill.
 
 ## Step 6: Report
 
@@ -132,4 +130,4 @@ this command.
 
 ---
 
-This command interviews and records. It does not interpret history or advise on it.
+This skill interviews and records. It does not interpret history or advise on it.
