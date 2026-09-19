@@ -2,6 +2,46 @@
 
 All notable changes to HealthyPress are documented here.
 
+## 0.1.9 — 2026-09-19
+
+### Removed
+
+- **The `health-summary-pages` skill is gone**, along with everything built on it: the set
+  arithmetic for each derived page, the `## Sources` footer contract, drift detection, and the
+  tag→page partial-regeneration table.
+- **`/healthypress:setup` no longer creates eight pages.** Current Medications, Allergies &
+  Intolerances, Conditions, Care Team, Immunization Record, Emergency Summary, and About This Site
+  are all gone.
+- **`/healthypress:log` step 9 (refresh affected pages) and `/healthypress:backfill` step 5
+  (regenerate all pages) are gone.** Logging a record no longer writes to any page.
+- **`/healthypress:review` no longer audits pages** for staleness or drift.
+- **The `health-intake-interview` skill is gone.** The non-leading-question table, era and system
+  recall scaffolding, the fuzzy-date elicitation ladder, the pacing/exit rules, and the
+  uncertainty-recording table went with it. The plugin ships two skills now:
+  `health-content-model` and `wpcom-mcp-operations`.
+  - `/healthypress:log` keeps the rules it depended on inline: one question at a time, ask open,
+    ask for the field rather than a guessed value, `unknown` is acceptable.
+  - `/healthypress:backfill` already spelled out the era, system, and forgettables passes inline,
+    so its plan shape is unchanged; it just no longer cites the skill as the source.
+  - No replacement guidance exists for *how* to elicit a fuzzy date conversationally. The mechanics
+    of storing one (midpoint sentinels, `precision-` tags, verbatim `Date reported as:`) remain in
+    `health-content-model`.
+
+### Changed
+
+- **One page: Health Summary.** `/healthypress:setup` creates it published, seeded with a short
+  intro, an empty `## Undated facts` section, and the boundaries that used to live on About This
+  Site. It is not derived. The user maintains it, or asks the agent to summarize their health onto
+  it — either way nothing regenerates or overwrites it on a schedule.
+- **The blog listing stays as the front page.** Setup no longer sets `show_on_front` /
+  `page_on_front`.
+- **Undated facts still go on the Health Summary page**, but by **appending** to its
+  `## Undated facts` section rather than regenerating the page.
+- `health-content-model`'s one rule is now "posts are the whole record; current state is read back
+  out of them when asked" rather than "posts are the ledger, pages are the view."
+- `/healthypress:share` describes what a Viewer sees as the Health Summary page rather than a set
+  of derived pages.
+
 ## 0.1.8 — 2026-09-18
 
 ### Removed

@@ -55,16 +55,15 @@ Before sending any invite, say this in plain language and get an explicit yes:
 > - They can also **edit and trash your records**, including ones they didn't create. WordPress has
 >   no read-only-private role, so full read comes bundled with full write. Trashed posts are
 >   recoverable for 30 days.
-> - They can upload media and edit the derived pages.
+> - They can upload media and edit the Health Summary page.
 > - They cannot change site settings, change privacy, or add other users. That stays with you.
 >
 > The alternative is **Viewer**, which is read-only — but a Viewer sees only *published* content, so
-> on this site they'd see the derived pages (Current Medications, Allergies, Emergency Summary) and
-> none of the individual private records. That's the right choice for someone who needs your med and
-> allergy list but not your whole history.
+> on this site they'd see the Health Summary page and none of the individual private records.
+> That's the right choice for someone who should see the summary but not your whole history.
 
 Offer both with `AskUserQuestion`: **Editor** (full read, can also edit) · **Viewer** (read-only,
-pages only) · **Cancel**.
+Health Summary only) · **Cancel**.
 
 Then send the invite for the chosen role. Confirm what was sent, to which address, in which role,
 and that it's pending until they accept. If the invite fails, show the error and STOP — do not retry
@@ -76,7 +75,7 @@ Show the current role, state what the new role can and cannot do using the same 
 framing as step 3, get an explicit yes, then change it and read the role back.
 
 Downgrading Editor → Viewer means they immediately lose access to every individual record and keep
-only the published pages. Say that before doing it, so it isn't a surprise when they call.
+only the published Health Summary page. Say that before doing it, so it isn't a surprise when they call.
 
 ## Step 5: Revoke
 

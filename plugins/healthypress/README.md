@@ -4,8 +4,8 @@ Run a private WordPress.com site as your personal health record.
 
 WordPress already ships nearly everything a health log needs: dated posts, hierarchical categories,
 tags, media attachments, user roles, and private site visibility. HealthyPress is the knowledge that
-turns those primitives into a coherent record — a closed taxonomy, a naming discipline, derived
-summary pages, and a privacy-first setup sequence.
+turns those primitives into a coherent record — a closed taxonomy, a naming discipline, and a
+privacy-first setup sequence.
 
 **The plugin carries knowledge, not code.** No PHP, no custom post types, no companion WordPress
 plugin. Everything it does, it does through the WordPress.com MCP server against stock core
@@ -36,11 +36,11 @@ existing site, because a dedicated site is what keeps health content out of plac
 
 | Command | What it does |
 |---|---|
-| `/healthypress:setup` | Creates a new site, then runs the **privacy gate** — set Private, verify, discourage search engines, disable comments, neutral title, timezone — then creates the taxonomy and the pages and prints a privacy report. Stops hard if the site can't be made Private. |
-| `/healthypress:log` | The daily driver. One event in, one private post out: interview, classify, resolve tags, compute the date, compose, read the whole record back for confirmation, save, attach files, refresh the affected pages. |
-| `/healthypress:backfill` | Guided history intake, era by era and system by system. Checkpoints every ~10 records, keeps a resumable captured list, never re-asks about a declined topic, regenerates all pages once at the end. Warns about the free-plan 30-day cliff before starting. |
-| `/healthypress:share` | Care team access. Only runs on a Private site. Invites as **Editor** (full read of the whole timeline — and, unavoidably, edit and trash rights) or **Viewer** (read-only, published pages only), in plain language about the tradeoff. Also lists, changes, and revokes. |
-| `/healthypress:review` | Read-only factual report — counts, frequencies, co-occurrences, gaps — plus a hygiene audit (near-duplicate tags, missing required fields, untriaged posts, drafts, drifted pages) and a privacy check. Never interprets. |
+| `/healthypress:setup` | Creates a new site, then runs the **privacy gate** — set Private, verify, discourage search engines, disable comments, neutral title, timezone — then creates the taxonomy and the Health Summary page and prints a privacy report. Stops hard if the site can't be made Private. |
+| `/healthypress:log` | The daily driver. One event in, one private post out: interview, classify, resolve tags, compute the date, compose, read the whole record back for confirmation, save, attach files. |
+| `/healthypress:backfill` | Guided history intake, era by era and system by system. Checkpoints every ~10 records, keeps a resumable captured list, never re-asks about a declined topic. Warns about the free-plan 30-day cliff before starting. |
+| `/healthypress:share` | Care team access. Only runs on a Private site. Invites as **Editor** (full read of the whole timeline — and, unavoidably, edit and trash rights) or **Viewer** (read-only, published content only), in plain language about the tradeoff. Also lists, changes, and revokes. |
+| `/healthypress:review` | Read-only factual report — counts, frequencies, co-occurrences, gaps — plus a hygiene audit (near-duplicate tags, missing required fields, untriaged posts, drafts) and a privacy check. Never interprets. |
 
 ## Skills
 
@@ -48,19 +48,17 @@ These load on their own when the topic comes up; you don't invoke them.
 
 | Skill | Content |
 |---|---|
-| `health-content-model` | The schema: posts vs. pages, the category taxonomy, the tag namespaces, titles, excerpts, dates, the sectioned body, media rules. |
+| `health-content-model` | The schema: what becomes a post, the category taxonomy, the tag namespaces, titles, excerpts, dates, the sectioned body, media rules. |
 | `wpcom-mcp-operations` | WordPress.com MCP mechanics: the facade pattern, runtime schema discovery, status and date defaults, write confirmation, pagination, launch-then-privatize ordering, trash vs. delete. |
-| `health-intake-interview` | How to ask: era and system recall scaffolding, fuzzy-date elicitation, non-leading questions, verbatim capture, pacing and exits. |
-| `health-summary-pages` | How each derived page is computed, the footer and `## Sources` contract, drift detection, partial vs. full regeneration. |
 
 ## How the record is shaped
 
-**A post is an event that happened at a point in time. A page is a current-state projection with no
-date. Posts are the ledger; pages are the view.**
+**A post is an event that happened at a point in time. Posts are the whole record.** Current state
+isn't stored anywhere — it's read back out of the posts when you ask for it.
 
-So a medication isn't a post — *starting* lisinopril is a post, *stopping* it is another, and
-"Lisinopril 10 mg daily" is a row on the Current Medications page computed from the two. Same for
-conditions (diagnosis minus resolution), allergies (latest reaction per allergen), and the care team.
+So a medication isn't a post — *starting* lisinopril is a post, *stopping* it is another, and "am I
+still on lisinopril" is answered from the two. Same for conditions (diagnosis minus resolution),
+allergies (latest reaction per allergen), and the care team.
 
 - **Categories** are the kind of record: a closed, hierarchical list (`visit`, `lab`, `med-start`,
   `diagnosis`, `symptoms`, …), exactly one leaf per post, created by `/healthypress:setup`.
@@ -75,10 +73,10 @@ conditions (diagnosis minus resolution), allergies (latest reaction per allergen
 - **Every post has an excerpt**, so "show me June" is one cheap query.
 - **The post date is the event date.** Fuzzy dates get a midpoint sentinel plus a `precision-` tag
   plus the user's own words recorded verbatim. Ranges become two posts.
-- **Derived pages** — Health Summary, Current Medications, Allergies & Intolerances, Conditions,
-  Care Team, Immunization Record, Emergency Summary, About This Site — are generated, never
-  hand-edited. Each ends with a footer naming the posts it came from. Edit one by hand and the next
-  refresh stops and shows you the diff instead of overwriting.
+- **One page, Health Summary.** It's yours. Write it however you like, or ask the agent to
+  summarize your record onto it. Nothing regenerates or overwrites it behind your back. Facts with
+  no usable year — "broke my wrist as a kid, no idea when" — go in its `## Undated facts` section,
+  since they can't become dated posts. The front page stays the blog listing of your records.
 
 ## What this is not
 

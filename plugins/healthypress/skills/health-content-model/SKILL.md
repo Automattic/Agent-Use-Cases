@@ -1,6 +1,6 @@
 ---
 name: health-content-model
-description: The canonical content model for a WordPress site used as a personal health record - what becomes a post vs. a page, the closed category taxonomy, namespaced entity tags, title/excerpt/date rules, and the sectioned post body. Use whenever the user wants to log, record, file, or organize anything health related ("log my headache", "add my lab results", "I started a new medication", "record yesterday's visit"), with or without a slash command, and whenever reading health records back out of the site.
+description: The canonical content model for a WordPress site used as a personal health record - what becomes a post, the closed category taxonomy, namespaced entity tags, title/excerpt/date rules, and the sectioned post body. Use whenever the user wants to log, record, file, or organize anything health related ("log my headache", "add my lab results", "I started a new medication", "record yesterday's visit"), with or without a slash command, and whenever reading health records back out of the site.
 ---
 
 # Health Content Model
@@ -10,24 +10,27 @@ media. No custom post types, no post meta, no plugins. This skill is the schema.
 consistency is the only thing that makes the record queryable later.
 
 For MCP mechanics (facades, `describe`, status defaults, backdating) load `wpcom-mcp-operations`.
-For page derivation load `health-summary-pages`. For intake technique load `health-intake-interview`.
 
 ## The one rule everything follows
 
-> **A post is an event that happened at a point in time. A page is a current-state projection with
-> no date. Posts are the ledger; pages are the view. Pages are always derived from posts, never
-> authored by hand.**
+> **A post is an event that happened at a point in time. Posts are the whole record. Current state
+> is not stored anywhere — it is read out of the posts when someone asks for it.**
 
-A medication is not a post. *Starting* lisinopril is a post; *stopping* it is another post.
-"Lisinopril 10 mg daily" is a row on the Current Medications page, computed from `med-start` posts
-tagged `rx-lisinopril` minus later `med-stop` posts with the same tag. Conditions work the same way
+A medication is not a post. *Starting* lisinopril is a post; *stopping* it is another post. "Am I
+currently on lisinopril?" is answered by reading `med-start` posts tagged `rx-lisinopril` and
+checking for a later `med-stop` with the same tag. Conditions work the same way
 (diagnosis − resolution), as do allergies (latest reaction per allergen) and the care team.
+
+The site has exactly one page, **Health Summary**. It is not derived and not maintained by this
+plugin: the user writes it, or asks the agent to summarize onto it. Never overwrite it as a side
+effect of logging. The one place HealthyPress touches it is the `## Undated facts` section, which it
+appends to.
 
 ## Quick reference
 
 | Question | Answer |
 |---|---|
-| Post or page? | Something happened on a date → post. Current state → page (derived). |
+| Post or page? | Everything you record is a post. The only page is Health Summary, which the user owns. |
 | Category | Exactly one leaf from the closed list. Never invent one. Unsure → `needs-triage`. |
 | Tags | Namespaced entities only. Search before create. Max 8. Exactly one `sys-` and one `src-`. |
 | Title | `<Type>: <Subject> — <most specific fact>`, ≤70 chars, no date (except journal/fuzzy). |
@@ -101,11 +104,11 @@ title parenthetical, and a verbatim `Date reported as:` line in `## Details`.
 | "sometime in March 2019" | `2019-03-15 12:00` | `precision-month` | `(Mar 2019)` |
 | "spring of 2019" | `2019-04-15 12:00` | `precision-month` | `(spring 2019)` |
 | "sometime in 2015" | `2015-07-01 12:00` | `precision-year` | `(c. 2015)` |
-| no usable year at all | **don't create a post** | — | undated fact on the Health Summary page |
+| no usable year at all | **don't create a post** | — | append to `## Undated facts` on the Health Summary page |
 
 **Ranges become two posts.** "Plantar fasciitis 2015 to 2018" is a `diagnosis` at 2015 and a
-`resolution` at 2018, both tagged `dx-plantar-fasciitis`. A single midpoint post breaks the
-active/resolved derivation.
+`resolution` at 2018, both tagged `dx-plantar-fasciitis`. A single midpoint post makes it impossible
+to tell later whether the condition is active or resolved.
 
 ## Post body — stable H2 sections
 
@@ -133,8 +136,8 @@ here. Media deletion is permanent and unrecoverable.
 
 ## Common gotchas
 
-- Posts default to draft. Always set status `private` explicitly, or the record is invisible and the
-  derived pages silently undercount.
+- Posts default to draft. Always set status `private` explicitly, or the record is invisible to
+  listings and silently missing from anything read back out of the site.
 - `private` status also avoids triggering subscription email. Publishing a health record publicly is
   the one unrecoverable mistake in this plugin.
 - A future date turns a record into a scheduled post that vanishes from listings.

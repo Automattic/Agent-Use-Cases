@@ -13,8 +13,7 @@ A factual report over what has been logged, and an audit of the record's own int
 command writes nothing.** It fixes nothing on its own — it tells the user what it found and offers
 the command that would fix it.
 
-Load `health-content-model` and `wpcom-mcp-operations` before step 1; `health-summary-pages` before
-step 3.
+Load `health-content-model` and `wpcom-mcp-operations` before step 1.
 
 ## Step 0.5: Connect to the MCP server
 
@@ -78,25 +77,22 @@ Rules for this section, without exception:
 Report each, with the specific post IDs and a suggested fix. Fix nothing automatically.
 
 1. **Near-duplicate tags.** Compare tags within each prefix for small edit distances, singular/plural
-   pairs, and brand-vs-generic pairs (`rx-lipitor` next to `rx-atorvastatin`). These split derived
-   page rows silently, so this is the highest-value check here.
+   pairs, and brand-vs-generic pairs (`rx-lipitor` next to `rx-atorvastatin`). These split one
+   entity into two silently, so this is the highest-value check here.
 2. **Missing required `## Details` keys**, per `references/record-types.md`, per leaf category.
 3. **Posts in `needs-triage`** — list them so they can be reclassified.
 4. **Tag-rule violations** — no `sys-`, no `src-`, more than one of either, more than 8 tags, an
    unprefixed tag, a `precision-` tag on an exact date or missing from a sentinel date.
-5. **Drafts.** Any health post whose status isn't `private` — a draft is invisible to the derived
-   pages and silently undercounts them. Also flag any post that is **public**: that's a privacy
+5. **Drafts.** Any health post whose status isn't `private` — a draft is invisible to listings and
+   silently undercounts this report. Also flag any post that is **public**: that's a privacy
    incident, and it goes at the top of the report, not in a list.
 6. **Future-dated posts** (status `future`), which vanish from listings until their date arrives.
-7. **Stale or drifted pages.** For each derived page, compare its footer's source post IDs and
-   timestamp against the posts that exist now. Report `stale` (new posts since generation) separately
-   from `drifted` (body disagrees with its own sources — hand-edited).
-8. **Orphaned derivations** — a `med-stop` with no `med-start`, a `resolution` with no `diagnosis`, a
+7. **Orphaned sequences** — a `med-stop` with no `med-start`, a `resolution` with no `diagnosis`, a
    `med-change` with no open run.
-9. **Fuzzy-date collisions** — two records for the same tag on the same midpoint sentinel, where the
+8. **Fuzzy-date collisions** — two records for the same tag on the same midpoint sentinel, where the
    ordering is arbitrary.
-10. **Attachments** — posts whose `## Attachments` section names a file that isn't attached, and
-    media with identifying filenames (a date pattern plus a generic type is the rule).
+9. **Attachments** — posts whose `## Attachments` section names a file that isn't attached, and
+   media with identifying filenames (a date pattern plus a generic type is the rule).
 
 ## Step 4: The privacy check
 

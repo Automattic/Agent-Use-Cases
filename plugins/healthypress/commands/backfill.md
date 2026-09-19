@@ -12,8 +12,7 @@ arguments:
 Walks the user's past into the record. This is a long, tiring conversation, so it is built around
 checkpoints, a visible captured list, and an easy exit at every turn.
 
-Load `health-intake-interview`, `health-content-model`, and `wpcom-mcp-operations` before step 2;
-`health-summary-pages` before the final step.
+Load `health-content-model` and `wpcom-mcp-operations` before step 2.
 
 ## Step 0: Safety check
 
@@ -52,7 +51,7 @@ land. Don't send the user off to configure anything — do it for them.
 Read existing records first (a post listing with dates and excerpts is one cheap call) so you never
 ask about something already captured. Show the user what's already there.
 
-Then agree on a plan, in the user's words. Default shape, from `health-intake-interview`:
+Then agree on a plan, in the user's words. Default shape:
 
 **Era pass** — now/active → last year → last five years → each earlier decade → childhood.
 **System pass** — heart · lungs · digestion · bones and joints · head and nerves · hormones · skin ·
@@ -104,8 +103,7 @@ Stop here · take a break (I'll note where we are) · keep going
 ```
 
 Make stopping the easy option, not the awkward one. If they stop, print the captured list plus
-what's still open, tell them `/healthypress:backfill resume` continues from here, and go to step 5 —
-pages still get regenerated so the site is consistent.
+what's still open, tell them `/healthypress:backfill resume` continues from here, and go to step 5.
 
 **Never ask about anything the user declined.** Keep a declined list and honor it for the rest of the
 session and any resumed one. If they said "I don't want to get into the hospital stuff," that topic
@@ -113,16 +111,15 @@ is closed until they reopen it.
 
 If they seem tired or distressed, offer the break before they have to ask for it.
 
-## Step 5: Regenerate all pages, once, at the end
+## Step 5: Undated facts, once, at the end
 
-Full regeneration — every derived page — after the session ends (whether it ended by completion or by
-the user stopping). Not per record: the intermediate states are garbage and the timestamp churn is
-noise.
+If any facts in this session had no usable year, they got no post. Offer to append them, as bullets
+quoting the user verbatim, to the `## Undated facts` section of the Health Summary page. **Append
+only** — read the section, add to it, and leave the rest of the page exactly as the user left it.
 
-Run drift detection on each page first. On drift, **stop and show the diff** rather than overwriting.
-
-Carry forward the Health Summary's `## Undated facts` section verbatim, and add any facts from this
-session that had no usable year.
+HealthyPress does not generate or regenerate the Health Summary page. If the user wants it brought
+up to date with everything just captured, they can ask — that's an ordinary request, not part of
+this command.
 
 ## Step 6: Report
 
@@ -130,7 +127,7 @@ session that had no usable year.
 - New tags created (so the user can spot a misspelling while it's still fresh).
 - Records that landed in `needs-triage`.
 - What's still open from the plan, and what was declined.
-- Pages regenerated.
+- Any undated facts added to the Health Summary page.
 - One line: `/healthypress:review` will audit the result; `/healthypress:backfill resume` continues.
 
 ---

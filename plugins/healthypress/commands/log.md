@@ -1,5 +1,5 @@
 ---
-description: Record one health event — interview, classify, tag, date, compose, confirm, save as private, refresh affected pages
+description: Record one health event — interview, classify, tag, date, compose, confirm, save as private
 allowed-tools: mcp__wpcom__wpcom-mcp-site, mcp__wpcom__wpcom-mcp-content-authoring, mcp__plugin_healthypress_wpcom__wpcom-mcp-site, mcp__plugin_healthypress_wpcom__wpcom-mcp-content-authoring, mcp__wpcom__authenticate, mcp__wpcom__complete_authentication, mcp__plugin_healthypress_wpcom__authenticate, mcp__plugin_healthypress_wpcom__complete_authentication, AskUserQuestion, Read, Skill, Bash
 arguments:
   - name: entry
@@ -9,11 +9,9 @@ arguments:
 
 # Log a Health Record
 
-The daily driver. One event in, one private post out, plus a refresh of only the pages that event
-can affect.
+The daily driver. One event in, one private post out.
 
-Load `health-content-model` and `wpcom-mcp-operations` before step 2; load `health-intake-interview`
-if anything needs asking, and `health-summary-pages` before step 8.
+Load `health-content-model` and `wpcom-mcp-operations` before step 2.
 
 ## Step 0: Safety check, before anything else
 
@@ -51,9 +49,11 @@ Note the site timezone; every date below is in site-local time.
 Use the `entry` argument if given. Otherwise ask, once, openly: "What would you like to record?"
 
 Capture their words verbatim before doing anything else — that text becomes `## Summary`, in quotes.
-Then, following `health-intake-interview`, ask **one question at a time** for only the required
-`## Details` keys the record type needs and the user hasn't already given. Never lead. `unknown` is
-an acceptable value for any key.
+Then ask **one question at a time** for only the required `## Details` keys the record type needs
+and the user hasn't already given. Ask open and never lead — "what did it feel like?", not "was it a
+migraine?"; ask for the field, not a guessed value ("who ordered it?", not "was that Dr. Okafor?").
+A guessed name that gets a polite yes becomes a permanent wrong tag. `unknown` is an acceptable
+value for any key, and "I don't know" is a complete answer.
 
 If what they described is really two events (a visit *and* the lab that came from it), say so and
 offer to record both, one at a time. Never merge two kinds into one post.
@@ -75,7 +75,7 @@ ask with `AskUserQuestion`, offering the two plus "none of these". If nothing fi
 5. Enforce: max 8 tags, exactly one `sys-`, exactly one `src-`. If you're over 8, drop the least
    specific entity tag, never the `sys-` or `src-`.
 
-Do not skip the search. A silent near-duplicate tag splits a derived page row in two and nothing
+Do not skip the search. A silent near-duplicate tag splits one entity into two and nothing
 downstream can detect it.
 
 ## Step 5: Compute the date
@@ -86,8 +86,9 @@ The post date is the **clinical event date** in site-local time, not the recordi
 - Fuzzy → use the midpoint sentinel from `health-content-model`, add the `precision-` tag, add the
   parenthetical to the title, and put a verbatim `Date reported as: "<their words>"` line in
   `## Details`.
-- No usable year at all → **do not create a post.** Offer to add it to the Health Summary's
-  `## Undated facts` instead.
+- No usable year at all → **do not create a post.** Offer to append it to the `## Undated facts`
+  section of the Health Summary page instead, as a bullet quoting the user verbatim. Append only —
+  never rewrite the rest of that page; it's the user's.
 - A date range → **two posts** (e.g. `diagnosis` then `resolution`). Confirm that with the user and
   do them one at a time.
 - **Never a future date.** If the computed date is in the future, it's a timezone or year error —
@@ -108,8 +109,8 @@ If they want changes, revise and read it back again. Loop until they confirm or 
 ## Step 7: Create the post as private
 
 `describe` the post-create operation before its first use this session, then create with **status
-explicitly `private`** and the computed date. Posts default to draft, and a draft is invisible to the
-derived pages; `private` also avoids triggering subscription email.
+explicitly `private`** and the computed date. Posts default to draft, and a draft is invisible to
+listings and reports; `private` also avoids triggering subscription email.
 
 Read the created post back and verify: stored date matches what you sent (backdating can be
 coerced), status is `private`, category and tags are attached. If the date came back as now instead
@@ -133,16 +134,10 @@ For each file the user wants attached:
 - Remind the user once per session: **media URLs on a private site are not verified to be
   protected.** Redact MRNs, full date of birth, insurance IDs, and addresses before uploading.
 
-## Step 9: Refresh only the affected pages
+## Step 9: Report
 
-Using the tag→page table in `health-summary-pages`, regenerate only the pages this record can
-change. Run drift detection on each page first: if a page's body disagrees with its `## Sources`
-footer, **stop and show the diff** rather than overwriting.
-
-## Step 10: Report
-
-One short confirmation: the title, the post ID, the date as stored, the category, the tags, and which
-pages were refreshed. Then offer to log another.
+One short confirmation: the title, the post ID, the date as stored, the category, and the tags. Then
+offer to log another.
 
 ---
 

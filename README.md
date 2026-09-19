@@ -36,7 +36,7 @@ MCP is available on all paid WordPress.com plans. **Free sites get 30 days from 
 
 | Plugin | Use case |
 |---|---|
-| [`healthypress`](plugins/healthypress) | A private WordPress.com site as a **personal health record**: privacy-hardened setup, guided history backfill, ongoing journaling, derived summary pages (current medications, allergies, conditions, emergency summary), and care team sharing. Records and organizes; never diagnoses or advises. |
+| [`healthypress`](plugins/healthypress) | A private WordPress.com site as a **personal health record**: privacy-hardened setup, guided history backfill, ongoing journaling, a Health Summary page, and care team sharing. Records and organizes; never diagnoses or advises. |
 
 ## Repository layout
 

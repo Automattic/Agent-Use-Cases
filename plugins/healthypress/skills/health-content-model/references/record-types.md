@@ -93,7 +93,7 @@ Title: `Med stop: <Generic> — <reason>`
 Keys: Drug (generic) · Brand · Last dose taken · Stopped by (prescriber / self) · Reason (per
 prescriber, or the user's own words quoted) · Taper instructions
 
-All three carry the same `rx-` tag. The Current Medications page depends on it.
+All three carry the same `rx-` tag. Working out what someone is currently taking depends on it.
 
 ## conditions
 

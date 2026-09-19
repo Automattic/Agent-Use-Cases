@@ -1,5 +1,5 @@
 ---
-description: Create a new private WordPress.com site as a personal health record — privacy gate first, then taxonomy and pages.
+description: Create a new private WordPress.com site as a personal health record — privacy gate first, then taxonomy and the Health Summary page.
 allowed-tools: mcp__wpcom__wpcom-mcp-site, mcp__wpcom__wpcom-mcp-create-site, mcp__wpcom__wpcom-mcp-content-authoring, mcp__wpcom__wpcom-mcp-user-management, mcp__wpcom__authenticate, mcp__wpcom__complete_authentication, mcp__plugin_healthypress_wpcom__wpcom-mcp-site, mcp__plugin_healthypress_wpcom__wpcom-mcp-create-site, mcp__plugin_healthypress_wpcom__wpcom-mcp-content-authoring, mcp__plugin_healthypress_wpcom__wpcom-mcp-user-management, mcp__plugin_healthypress_wpcom__authenticate, mcp__plugin_healthypress_wpcom__complete_authentication, AskUserQuestion, Bash, Skill
 ---
 
@@ -142,39 +142,31 @@ Report created vs. already-present counts.
 
 Do not pre-create tags. Tags are created on demand by `/healthypress:log`, which searches first.
 
-## Step 6: Create the pages
+## Step 6: Create the Health Summary page
 
-Create the eight pages, each with the generated-page footer from the `health-summary-pages` skill and
-an empty `## Sources` list. They will be empty until there are posts, and that's correct:
+Create **one** page, titled `Health Summary`, with `status: "publish"` and `user_confirmed: true`.
+Show the user what it will contain, take one approval, then create it.
 
-Health Summary · Current Medications · Allergies & Intolerances · Conditions · Care Team ·
-Immunization Record · Emergency Summary · About This Site
+This page is the only page HealthyPress creates. It is **not** derived from posts and it is **not**
+the front page — the blog listing stays as the front page, so leave `show_on_front` alone. The page
+belongs to the user: they can write whatever they want on it, or ask the agent to summarize their
+health onto it. Nothing regenerates or overwrites it on a schedule.
 
-Each `pages.create` is a separate write needing `user_confirmed: true`. Show the user the list once,
-take one approval, then create all eight.
+Seed it with a short starting body so the page isn't blank:
 
-Then wire the front page, in this order — **the order is enforced by the API**:
-
-1. **Publish** Health Summary (`status: "publish"`). `settings.update` rejects a page that isn't
-   published, and a draft cannot render as a front page.
-2. `settings.update` with `show_on_front: "page"`, `page_on_front: <Health Summary id>`, and
-   `user_confirmed: true`.
-3. Read the setting back.
-
-A static front page matters: the default blog index would list health records in
-reverse-chronological order as the first thing anyone sees.
-
-**About This Site** is the one non-derived page. Write it with: what this site is, that it is
-self-entered and not a medical record, that HIPAA does not apply to it, the model in two sentences
-(posts are events, pages are derived), and the Boundaries block below.
+- A one-line note that this is a personal summary the user (or the agent, on request) maintains by
+  hand, and that the posts on the site are the actual record.
+- An `## Undated facts` heading with nothing under it. This is where facts with no usable year go,
+  since they can't become dated posts.
+- The boundaries: this site is self-entered, it is not a medical record, HIPAA does not apply to it,
+  and nothing here diagnoses or advises. Keep it to a few plain sentences.
 
 Every new site also comes with WordPress's own default placeholder content: a page titled "About"
-(content starting "This is an example of a page...") and a post titled "Hello World!". These are
-not HealthyPress content and have nothing to do with the About This Site page above — **trash
-both** before moving on (`pages.delete` / `posts.delete` only move to trash via the MCP; that's
-fine, no need for a permanent purge). Find them by listing pages and posts and matching the default
-title/slug (`about` / `hello-world`), and confirm the page's content still contains "This is an
-example of a page" before trashing it — don't delete on title alone.
+(content starting "This is an example of a page...") and a post titled "Hello World!". These are not
+HealthyPress content — **trash both** before moving on (`pages.delete` / `posts.delete` only move to
+trash via the MCP; that's fine, no need for a permanent purge). Find them by listing pages and posts
+and matching the default title/slug (`about` / `hello-world`), and confirm the page's content still
+contains "This is an example of a page" before trashing it — don't delete on title alone.
 
 ## Step 7: Print the privacy report
 
@@ -194,8 +186,7 @@ Privacy
 
 Structure
   Categories            28 present (23 created, 5 already existed)
-  Front page            Health Summary ✓
-  Pages                 8 present
+  Health Summary page   published ✓
   Default WP content    removed (sample "About" page, "Hello World!" post)
 
 Anything marked ✗ needs attention before you log health information.

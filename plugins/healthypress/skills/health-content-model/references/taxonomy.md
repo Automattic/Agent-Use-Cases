@@ -33,7 +33,7 @@ directly, except for the childless categories, which are themselves leaves.
 | `referral` | `care-admin` | referral issued or completed |
 | `records` | `care-admin` | records requested, received, released |
 | `symptoms` | — | something the user felt, one episode per post |
-| `allergies` | — | a reaction event (the allergy list is derived from these) |
+| `allergies` | — | a reaction event (the allergy list is read back out of these) |
 | `immunizations` | — | a vaccine administered |
 | `journal` | — | a dated subjective entry with no clinical event |
 | `needs-triage` | — | **site default category.** Unclassifiable records land here on purpose. |
