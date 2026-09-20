@@ -34,24 +34,15 @@ existing site, because a dedicated site is what keeps health content out of plac
 
 ## Skills
 
-Everything here is a skill. Invoke the five below directly with the slash form, or just describe
-what you want in plain language and the right one loads on its own.
+Three skills. You invoke two of them; the third loads on its own.
 
 | Skill | What it does |
 |---|---|
-| `/healthypress:setup` | Creates a new site, then runs the **privacy gate** — set Private, verify, discourage search engines, disable comments, neutral title, timezone — then creates the taxonomy and the Health Summary page and prints a privacy report. Stops hard if the site can't be made Private. |
-| `/healthypress:log` | The daily driver. One event in, one private post out: interview, classify, resolve tags, compute the date, compose, read the whole record back for confirmation, save, attach files. |
-| `/healthypress:backfill` | Guided history intake, era by era and system by system. Checkpoints every ~10 records, keeps a resumable captured list, never re-asks about a declined topic. Warns about the free-plan 30-day cliff before starting. |
-| `/healthypress:share` | Care team access. Only runs on a Private site. Invites as **Editor** (full read of the whole timeline — and, unavoidably, edit and trash rights) or **Viewer** (read-only, published content only), in plain language about the tradeoff. Also lists, changes, and revokes. |
-| `/healthypress:review` | Read-only factual report — counts, frequencies, co-occurrences, gaps — plus a hygiene audit (near-duplicate tags, missing required fields, untriaged posts, drafts) and a privacy check. Never interprets. |
+| `/healthypress:setup` | Creates a new site, then runs the **privacy gate** — set Private, verify by reading the status back, require login to comment, neutral title, timezone — then creates the taxonomy and the Health Summary page and prints a privacy report. Stops hard if the site can't be confirmed Private. |
+| `/healthypress:log` | The daily driver. One event in, one private post out: interview, classify, resolve tags, compute the date, compose, read the whole record back for confirmation, save, attach files. Also triggers from plain language — "log my headache", "I started a new medication". |
+| `health-record` | Reference knowledge, not a workflow. The schema (what becomes a post, the category taxonomy, the tag namespaces, titles, excerpts, dates, the sectioned body, media rules) and the WordPress.com MCP mechanics (the facade pattern, runtime schema discovery, status and date defaults, write confirmation, visibility, trash vs. delete). Loads behind the other two; you don't invoke it. |
 
-Two more skills carry reference knowledge rather than a workflow. They load on their own when the
-topic comes up; you don't invoke them directly.
-
-| Skill | Content |
-|---|---|
-| `health-content-model` | The schema: what becomes a post, the category taxonomy, the tag namespaces, titles, excerpts, dates, the sectioned body, media rules. |
-| `wpcom-mcp-operations` | WordPress.com MCP mechanics: the facade pattern, runtime schema discovery, status and date defaults, write confirmation, pagination, launch-then-privatize ordering, trash vs. delete. |
+To backfill your history, run `/healthypress:log` repeatedly — there's no separate import workflow.
 
 ## How the record is shaped
 
@@ -102,6 +93,11 @@ Honest limits of doing this with core WordPress:
 - **Fuzzy dates collide** on shared midpoint sentinels, making same-day ordering arbitrary.
 - **Scale ceiling** in the low thousands of posts before listing and derivation get slow.
 - **One site = one person.** No family records on one site.
+- **Sharing is all-or-nothing, and read implies write.** Adding someone is a WordPress.com web UI
+  operation (People → Invite). An Editor can read every private record — the whole timeline, not a
+  subset — but WordPress has no read-only-private role, so they can also edit and trash records. A
+  Viewer is read-only but sees only *published* content, which on this site is the Health Summary
+  page and nothing else.
 - **No FHIR, no CCD.** Export is a WXR file no clinician can read or import.
 - **Deleting a post is a 30-day trash**, not a delete. Media deletion *is* permanent.
 

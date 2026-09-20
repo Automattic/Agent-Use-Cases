@@ -4,7 +4,7 @@ Required `## Details` keys per leaf category, plus title patterns and worked exa
 
 Keys are written as `Key: value` lines in a `## Details` section, in the order listed. If a required
 key is genuinely unknown, write `unknown` rather than omitting the line — an omitted key is
-indistinguishable from an unasked question, and `/healthypress:review` audits for missing keys.
+indistinguishable from an unasked question.
 
 Every record also carries, in `## Provenance`: `Recorded: <YYYY-MM-DD>` (today, as distinct from the
 event date), `Source: <how the user knows this>`, and — when the date is fuzzy — the
@@ -121,7 +121,8 @@ Title: `Reaction: <Substance> — <reaction>`
 Keys: Substance · Reaction · Onset after exposure · Severity (user's or clinician's words, quoted) ·
 Treatment given · Confirmed by · Avoid since
 
-One post per reaction event. The Allergies page derives from the latest reaction per `alg-` tag.
+One post per reaction event. The allergy list is read back out of these records — the latest
+reaction per `alg-` tag.
 
 ## immunizations
 

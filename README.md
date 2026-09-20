@@ -36,23 +36,28 @@ MCP is available on all paid WordPress.com plans. **Free sites get 30 days from 
 
 | Plugin | Use case |
 |---|---|
-| [`healthypress`](plugins/healthypress) | A private WordPress.com site as a **personal health record**: privacy-hardened setup, guided history backfill, ongoing journaling, a Health Summary page, and care team sharing. Records and organizes; never diagnoses or advises. |
+| [`healthypress`](plugins/healthypress) | A private WordPress.com site as a **personal health record**: privacy-hardened setup with a closed health taxonomy, then ongoing journaling into private, dated, tagged posts. Records and organizes; never diagnoses or advises. |
 
 ## Repository layout
 
 ```
 .claude-plugin/marketplace.json   every plugin and skill declared inline
 plugins/<name>/                   one plugin = one use case
-CONTRIBUTING.md                   how to add use case #2
-CLAUDE.md                         conventions for agents working in this repo
+plugins/<name>/skills/            SKILL.md per skill, bulk in references/
+plugins/<name>/.mcp.json          MCP servers the plugin needs
 ```
 
 ## Adding a use case
 
-Create `plugins/<your-use-case>/` and register every component path in
-`.claude-plugin/marketplace.json`. Read [`CONTRIBUTING.md`](CONTRIBUTING.md) first — it covers
-the core-only rule, the runtime-schema-discovery rule, and why some text in this repo is duplicated
-on purpose.
+Create `plugins/<your-use-case>/` and register every skill path in
+`.claude-plugin/marketplace.json` — a skill directory missing from that array is silently disabled,
+with no error. Bump the plugin `version` and the marketplace `metadata.version` together, and add a
+CHANGELOG entry.
+
+Two rules carry most of the weight. **Core WordPress only**: if a use case needs a custom post type,
+it isn't an agent use case. And **never hardcode an MCP facade's parameters** — `describe` the
+operation at runtime, then read every write back, because an unrecognized parameter can be silently
+dropped and a success response isn't evidence.
 
 ## License
 

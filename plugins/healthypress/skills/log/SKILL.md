@@ -8,7 +8,7 @@ allowed-tools: mcp__wpcom__wpcom-mcp-site, mcp__wpcom__wpcom-mcp-content-authori
 
 The daily driver. One event in, one private post out.
 
-Load `health-content-model` and `wpcom-mcp-operations` before step 2.
+Load `health-record` before step 2.
 
 ## Step 0: Safety check, before anything else
 
@@ -25,10 +25,8 @@ happening right now.
 ## Step 0.5: Connect to the MCP server
 
 If the only `wpcom` tools available are `authenticate` and `complete_authentication`, the server
-isn't authorized yet. Call `authenticate`, open the returned URL in the user's browser with Bash
-(`open` / `xdg-open` / `start`), tell them the grant is account-wide, and wait for them to approve.
-See `wpcom-mcp-operations` for the full handshake, including the fallback when the callback doesn't
-land. Don't send the user off to configure anything — do it for them.
+isn't authorized yet. Do the handshake per `health-record` § Authentication — don't send the user
+off to configure anything.
 
 ## Step 1: Confirm the site is set up
 
@@ -58,7 +56,7 @@ offer to record both, one at a time. Never merge two kinds into one post.
 
 ## Step 3: Classify to exactly one leaf category
 
-Pick the leaf from the closed list in `health-content-model`. If two leaves are genuinely plausible,
+Pick the leaf from the closed list in `health-record`. If two leaves are genuinely plausible,
 ask with `AskUserQuestion`, offering the two plus "none of these". If nothing fits, use
 `needs-triage` and tell the user it's filed for later triage — do not invent a category.
 
@@ -66,8 +64,8 @@ ask with `AskUserQuestion`, offering the two plus "none of these". If nothing fi
 
 1. List/search existing tags for each entity's bare term (`lisinopril`, not `rx-lisinopril`).
 2. One plausible match → reuse it.
-3. Two or more → ask the user which; mention the near-duplicate so `/healthypress:review` can clean
-   it up.
+3. Two or more → ask the user which, and note the near-duplicate for them so it can be cleaned up
+   later.
 4. None → create it per the naming rules (lowercase, ASCII, hyphenated, singular, namespaced,
    generic drug names only).
 5. Enforce: max 8 tags, exactly one `sys-`, exactly one `src-`. If you're over 8, drop the least
@@ -81,7 +79,7 @@ downstream can detect it.
 The post date is the **clinical event date** in site-local time, not the recording time.
 
 - Exact day, no time → `12:00:00`.
-- Fuzzy → use the midpoint sentinel from `health-content-model`, add the `precision-` tag, add the
+- Fuzzy → use the midpoint sentinel from `health-record`, add the `precision-` tag, add the
   parenthetical to the title, and put a verbatim `Date reported as: "<their words>"` line in
   `## Details`.
 - No usable year at all → **do not create a post.** Offer to append it to the `## Undated facts`

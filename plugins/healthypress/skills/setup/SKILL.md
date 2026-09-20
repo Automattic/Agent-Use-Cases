@@ -10,8 +10,7 @@ allowed-tools: mcp__wpcom__wpcom-mcp-site, mcp__wpcom__wpcom-mcp-create-site, mc
 from your existing sites, and it never writes health structure onto a site that has other things on
 it.
 
-Load the `wpcom-mcp-operations` skill before step 1 and the `health-content-model` skill before
-step 5.
+Load the `health-record` skill before step 1.
 
 **The order of these steps is the whole point. Do not write any health content before step 4
 verifies that the site is Private.**
@@ -80,7 +79,7 @@ Read the site's plan. If it is a **free** site, tell the user:
 
 > `<site>` is on the free plan. MCP access on free sites is limited to 30 days from site creation.
 
-Continue — setup does not need confirmation for this. (`/healthypress:backfill` stops and asks.)
+Continue — setup does not need confirmation for this.
 
 ## Step 4: The privacy gate
 
@@ -119,7 +118,7 @@ several times. No need to pause for approval first; write, then report what the 
 
 ## Step 5: Create the taxonomy
 
-Create the categories from `health-content-model` — the full closed list is in that skill's
+Create the categories from `health-record` — the full closed list is in that skill's
 `references/taxonomy.md`. Verified schema for `categories.create`: `name` (required), `slug`,
 `description`, `parent` (a category **ID**, not a slug), `include_fields`, `user_confirmed`.
 

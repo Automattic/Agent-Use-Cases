@@ -84,8 +84,8 @@ insurance, records requests. Use it rather than guessing a system.
 1. List/search tags for the bare term (`lisinopril`, not `rx-lisinopril`) — near-duplicates often
    differ in the prefix or a typo, so search the distinctive part.
 2. Exactly one plausible match → reuse it.
-3. Two or more plausible matches → **ask the user which one**, and offer to note the duplicate for
-   `/healthypress:review` to clean up.
+3. Two or more plausible matches → **ask the user which one**, and note the duplicate for the user
+   so it can be cleaned up later.
 4. No match → create it, spelled per the rules above.
 5. Never create two tags in one post that mean the same entity (`rx-vitamin-d` and `rx-cholecalciferol`).
 

@@ -2,6 +2,43 @@
 
 All notable changes to HealthyPress are documented here.
 
+## 0.2.0 — 2026-09-19
+
+### Removed
+
+- **`/healthypress:backfill` is gone.** With it: the era / system / forgettables recall passes, the
+  batch-of-10 pacing, the checkpoint block and running captured list, the declined-topics list
+  honored across resumed sessions, the `args: resume` contract, and the free-plan gate that
+  *blocked* a long import. The underlying 30-day fact survives in `health-record`; the blocking gate
+  does not. Backfilling history now means running `/healthypress:log` repeatedly.
+- **`/healthypress:review` is gone.** With it: the two report templates and the **nine-item hygiene
+  audit** — near-duplicate tag detection, missing required `## Details` keys, `needs-triage` strays,
+  tag-rule violations, drafts and public posts, `future`-dated posts, orphaned
+  `med-stop`/`resolution` sequences, fuzzy-date collisions, and attachment mismatches. This was the
+  plugin's only inverse-of-the-schema knowledge and there is no replacement. What survives is the
+  never-interpret rule, now three lines in `health-record` under `## The recorder stance`.
+- **`/healthypress:share` is gone.** With it: the Editor-vs-Viewer disclosure. Worth stating
+  plainly, because it's a real gap — WordPress has no read-only-private role, so granting a
+  clinician read access to the private timeline also grants edit and trash rights, and nothing in
+  the plugin will now say so before it happens. Sharing is a WordPress.com web UI operation now;
+  the tradeoff is documented in the README instead.
+- **`health-content-model` and `wpcom-mcp-operations` are gone as separate skills**, merged into
+  `health-record`.
+
+### Changed
+
+- **Three skills: `setup`, `log`, `health-record`.** Down from seven, and from ~1,390 lines of skill
+  prose to ~925.
+- **`health-record` is the content model and the MCP mechanics in one file.** The schema half comes
+  from `health-content-model`, the interface half from `wpcom-mcp-operations`, with every "Verified
+  2026-09-17" finding and every explicit "unverified" flag intact. `references/taxonomy.md` and
+  `references/record-types.md` moved under it unchanged apart from stale cross-references.
+- **The duplication is gone.** The "Connect to the MCP server" block had been copied verbatim into
+  four files, the not-Private stop gate appeared three times in three wordings, and
+  search-before-create appeared three times. One copy each now.
+- `/healthypress:log` and `/healthypress:setup` are otherwise unchanged in behavior; they just load
+  `health-record` instead of two separate reference skills.
+
 ## 0.1.10 — 2026-09-19
 
 ### Changed
