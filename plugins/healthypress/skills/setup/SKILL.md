@@ -168,31 +168,6 @@ trash via the MCP; that's fine, no need for a permanent purge). Find them by lis
 and matching the default title/slug (`about` / `hello-world`), and confirm the page's content still
 contains "This is an example of a page" before trashing it — don't delete on title alone.
 
-## Step 7: Print the privacy report
-
-Show the user a report they can actually verify, with the **read-back** value for each line — not
-the value you asked for. Mark anything that couldn't be verified or couldn't be set:
-
-```
-HealthyPress setup — healthypressq4t8.wordpress.com (blog 257423784)
-
-Privacy
-  Visibility            private ✓        (read back)
-  blog_public           -1 ✓
-  Comments              login required ✓
-  Site title            "healthypress-jordan" ✓
-  Tagline               empty ✓
-  Timezone              America/Chicago ✓
-
-Structure
-  Categories            28 present (23 created, 5 already existed)
-  Health Summary page   published ✓
-  Default WP content    removed (sample "About" page, "Hello World!" post)
-
-Anything marked ✗ needs attention before you log health information.
-```
-
-
 ---
 
 This skill configures a site. It does not record, interpret, or advise on health information.
