@@ -42,6 +42,7 @@ MCP is available on all paid WordPress.com plans. **Free sites get 30 days from 
 
 ```
 .claude-plugin/marketplace.json   every plugin and skill declared inline
+plugins/<name>/.claude-plugin/plugin.json   the plugin's manifest: version + components
 plugins/<name>/                   one plugin = one use case
 plugins/<name>/skills/            SKILL.md per skill, bulk in references/
 plugins/<name>/.mcp.json          MCP servers the plugin needs
@@ -49,16 +50,19 @@ plugins/<name>/.mcp.json          MCP servers the plugin needs
 
 ## Adding a use case
 
-Create `plugins/<your-use-case>/` with a `README.md`, a `CHANGELOG.md`, an `.mcp.json`, and one
-`skills/<skill>/SKILL.md` per skill, then add the plugin to `.claude-plugin/marketplace.json`.
-Every `SKILL.md` under `skills/` loads on its own; the entry's `skills` array only matters for
-skills kept elsewhere. Run `claude plugin validate .claude-plugin/marketplace.json` before you
-commit, and leave `strict` at its default — setting it to `false` on an entry that declares
-components makes the installed plugin fail to load. Every change to a plugin's behavior bumps that
-plugin's `version` in `marketplace.json` and adds an entry to its `CHANGELOG.md`, because users
-receive an update only when that version changes; a merge to `trunk` is the release. The full
-procedure is in [`AGENTS.md`](AGENTS.md) under "Versioning and releases", and the dev loop and the
-verified plugin mechanics are in [`docs/plugin-mechanics.md`](docs/plugin-mechanics.md).
+Create `plugins/<your-use-case>/` with a `.claude-plugin/plugin.json`, a `README.md`, a
+`CHANGELOG.md`, an `.mcp.json`, and one `skills/<skill>/SKILL.md` per skill. The manifest is the
+plugin: it carries the version and declares the components. Then add a catalogue entry to
+`.claude-plugin/marketplace.json` with just a `name`, a `source`, and a `description` — never a
+`version` and never a component, because Claude Code resolves those from the manifest and a second
+copy on the entry only goes stale. Every `SKILL.md` under `skills/` loads on its own; the
+manifest's `skills` array is there so the inventory is reviewable. Run
+`claude plugin validate .claude-plugin/marketplace.json` and
+`claude plugin validate plugins/<name> --strict` before you commit. Every change to a plugin's
+behavior bumps its `version` and adds an entry to its `CHANGELOG.md`, because users receive an
+update only when that version changes; a merge to `trunk` is the release. The full procedure is in
+[`AGENTS.md`](AGENTS.md) under "Versioning and releases", and the dev loop and the verified plugin
+mechanics are in [`docs/plugin-mechanics.md`](docs/plugin-mechanics.md).
 
 Two rules carry most of the weight. **Core WordPress only**: if a use case needs a custom post type,
 it isn't an agent use case. And **never hardcode an MCP facade's parameters** — `describe` the
