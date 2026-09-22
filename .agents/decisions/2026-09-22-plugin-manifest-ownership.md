@@ -42,7 +42,7 @@ The version now lives next to the `CHANGELOG.md` that describes it, which is wha
 
 Two invariants changed and one was added: invariant 1 now admits `plugin.json`, invariant 6 points at the manifest, and invariant 7 forbids declaring components on an entry. The Architecture section gained a layer.
 
-Still unverified: that the new shape loads from an *installed* copy. The reasoning is sound and the collision is gone by construction, but `claude plugin validate` passes manifests that fail to load — that is how 0.2.0 shipped — so the post-merge `claude plugin list` check is what settles it.
+Verified after merging, at v2.1.278: `claude plugin update` took the installed copy from 0.2.1 to 0.2.2, `claude plugin list` reports `✔ enabled` with no error, and `claude plugin details` lists three skills and one MCP server. The cached `.claude-plugin/plugin.json` is byte-identical to the committed one, which settles the assumption this decision rested on — Claude Code copies a real manifest rather than synthesizing over it, and only synthesizes when none exists.
 
 ## Links
 
