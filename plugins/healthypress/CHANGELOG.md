@@ -2,6 +2,22 @@
 
 All notable changes to HealthyPress are documented here.
 
+## 0.2.2 — 2026-09-22
+
+Packaging only. Nothing about the skills, the schema, or the site changes.
+
+### Changed
+
+- **The plugin now carries its own `.claude-plugin/plugin.json`**, which holds the version and
+  declares the three skills and the MCP server. The marketplace entry is down to a name, a source,
+  and a description, and no longer carries a version or any component. Claude Code resolves a
+  plugin's version from its manifest first and takes that value silently, so keeping a second copy
+  on the entry could only go stale without warning.
+- **The conflicting-manifests failure fixed in 0.2.1 is now impossible rather than merely absent.**
+  It happened because Claude Code synthesizes a manifest from a marketplace entry that declares
+  components; with a real manifest owning the components and the entry declaring none, the two
+  cannot collide whatever `strict` is set to.
+
 ## 0.2.1 — 2026-09-22
 
 ### Fixed
