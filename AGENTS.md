@@ -121,7 +121,7 @@ A merge to `trunk` **is** the release. There is no build, no publish step, and n
 
 While the bump is still unmerged, fold further changes of similar impact into that same version rather than bumping again; a higher-impact change upgrades it. Once it is on `trunk` it is released, so the next behavior change opens a new version. That is why there is no `[Unreleased]` section here: a heading is written with both its version and its date in the same commit as the change, and merging publishes it.
 
-A changelog entry is for a user deciding whether a change affects them. One bullet per user-visible behavior, not per commit; a follow-up fix to an unmerged behavior edits its bullet instead of appending a correction. The why, the evidence, and the mechanism go in the commit body, which git archives.
+A changelog entry is for a user deciding whether a change affects them. Before writing a bullet, name what they would observe — a command whose output differs, a behaviour they would hit, a limit they would run into. If naming it needs the words "the agent now knows", it is not a bullet, it is a commit message. One bullet per user-visible behaviour, not per commit. The why, the evidence, and the mechanism go in the commit body, which git archives and no session loads. Keep an entry near 150 words; past that, run the bullets through the test again. Any edit to an entry that has not shipped re-reads and prunes the whole entry, not just the part being changed — entries fail by accretion, each addition defensible alone and the total unreadable.
 
 Before merging:
 
