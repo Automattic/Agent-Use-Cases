@@ -83,8 +83,11 @@ gets **no legal health-privacy protection**.
 
 Honest limits of doing this with core WordPress:
 
-- **No structured numeric fields.** Post meta isn't in the MCP facade, so real charting of A1c over
-  time is out of reach. Numbers live in titles and body text.
+- **No structured numeric fields.** The MCP passes a `meta` object through, but it only accepts
+  platform-registered keys — Jetpack SEO, newsletter, social — and HealthyPress ships no code, so it
+  can add none. An unknown key is discarded silently while the write still reports success. Real
+  charting of A1c over time is out of reach, and faking it will look like it worked. Numbers live in
+  titles and body text.
 - **No relations.** A lab doesn't belong to a visit. You can tag both, but nothing links them.
 - **No referential integrity on tags.** `rx-lisinoprill` is a valid tag forever.
 - **No unit normalization.** mg/dL and mmol/L sit side by side.

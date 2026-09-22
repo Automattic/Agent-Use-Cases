@@ -108,14 +108,9 @@ If they want changes, revise and read it back again. Loop until they confirm or 
 explicitly `private`** and the computed date. Posts default to draft, and a draft is invisible to
 listings and reports; `private` also avoids triggering subscription email.
 
-Read the created post back and verify: stored date matches what you sent (backdating can be
-coerced), status is `private`, category and tags are attached. If the date came back as now instead
-of the date you sent, tell the user before writing anything else:
-
-> WordPress stored this record at `<actual>` instead of `<intended>`. Backdating isn't behaving as
-> expected on this site, so I've stopped. The record exists but has the wrong date.
-
-Then STOP.
+Read the created post back and verify three things: the stored date matches what you sent, the
+status is `private`, and the category and tags are attached. If any differ, stop and tell the user
+which one before writing anything else.
 
 ## Step 8: Attachments, if any
 
@@ -127,8 +122,9 @@ For each file the user wants attached:
 - Attach to this one post and list it under `## Attachments`.
 - Do not transcribe the whole document. Extract the required `## Details` keys, quote any Impression
   verbatim, and note `full document attached (<n> pages)`.
-- Remind the user once per session: **media URLs on a private site are not verified to be
-  protected.** Redact MRNs, full date of birth, insurance IDs, and addresses before uploading.
+- Remind the user once per session: a private site's media URLs return 403 to anonymous requests,
+  but anyone granted access to the site can open the file. Redact MRNs, full date of birth,
+  insurance IDs, and addresses before uploading.
 
 ## Step 9: Report
 

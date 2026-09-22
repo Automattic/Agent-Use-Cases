@@ -36,7 +36,7 @@ directly, except for the childless categories, which are themselves leaves.
 | `allergies` | — | a reaction event (the allergy list is read back out of these) |
 | `immunizations` | — | a vaccine administered |
 | `journal` | — | a dated subjective entry with no clinical event |
-| `needs-triage` | — | **site default category.** Unclassifiable records land here on purpose. |
+| `needs-triage` | — | Unclassifiable records land here on purpose. Not the site default category — that is not writable through the MCP, so a record only lands here when `/healthypress:log` assigns it. |
 
 Do not create categories beyond this list. If something genuinely doesn't fit, file it in the
 nearest leaf and explain in `## Details` under a `Note:` key — then mention it to the user so the

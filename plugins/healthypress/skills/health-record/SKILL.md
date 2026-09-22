@@ -58,7 +58,7 @@ Hierarchical, closed, exactly one leaf per post. Created once by `/healthypress:
 | `conditions` | `diagnosis`, `resolution` |
 | `care-admin` | `insurance`, `referral`, `records` |
 | `symptoms`, `allergies`, `immunizations`, `journal` | (no children) |
-| `needs-triage` | the site default category, so uncategorized records stay findable |
+| `needs-triage` | where a record goes when no leaf fits. **Not** the site default — `default_category` is not writable through the MCP, so this only catches records `/healthypress:log` assigns to it explicitly |
 
 Agents may not invent categories. A record that doesn't fit goes in the nearest leaf with a note in
 `## Details`. If a record wants two kinds, it is two records.
@@ -135,9 +135,9 @@ URL and are searchable. Never transcribe a whole document — extract the requir
 the Impression verbatim, and note "full document attached (4 pages)". Image generation has no role
 here. **Media deletion is permanent and unrecoverable.**
 
-Media URLs on a private site may or may not require authentication. Until that's verified on the
-site in question, treat every uploaded file's URL as potentially public: redact MRNs, full date of
-birth, insurance IDs, and addresses before uploading.
+**Verified 2026-09-22: media URLs on a private site are protected** — direct, resized and Photon-CDN
+requests all 403 anonymously. That protects the URL, not the contents; anyone granted access can
+open the file. Redact MRNs, full date of birth, insurance IDs, and addresses before uploading.
 
 ## The recorder stance
 
@@ -161,8 +161,9 @@ Mechanics of the server at `https://public-api.wordpress.com/wpcom/v2/mcp/v1`.
 
 ## The facade pattern
 
-There is no `wpcom_create_post` tool. The server exposes roughly eight **facade** tools, each
-covering a domain, and you select behavior with an `operation` parameter plus an `action`:
+There is no `wpcom_create_post` tool. The server exposes **facade** tools — 28 of them when last
+counted, on 2026-09-22 — each covering a domain, and you select behavior with an `operation`
+parameter plus an `action`. Four matter here:
 
 - `wpcom-mcp-site` — site settings, status, launch, visibility
 - `wpcom-mcp-content-authoring` — posts, pages, categories, tags, media, sections, search
@@ -176,6 +177,10 @@ Every facade supports two meta actions: `action: list` enumerates the operations
 
 **The documentation is explicit that schemas evolve and the live `describe` response is the source
 of truth.** So:
+
+**`describe` on `wpcom-mcp-content-authoring` is site-gated** (verified 2026-09-22): it needs a real
+`wpcom_site`, and an unknown one fails with "Site not found" before any schema comes back.
+`wpcom-mcp-site` describes without one. So resolve the site first, then discover content schemas.
 
 > **Never hardcode a facade's parameter names from memory or from a document, including this one.
 > `describe` the operation before its first use in a session, and pass exactly the parameters the
@@ -235,6 +240,10 @@ Skills that call these tools must list `authenticate` and `complete_authenticati
 - Tool availability also respects the connected user's WordPress role. An operation missing from
   `list` may be a permissions artifact rather than a server change — check the role before concluding
   the feature is gone.
+- **An operation can also be switched off per account.** `list` returns a `disabled_operations`
+  array alongside the live ones, each with a reason such as "This operation is disabled in your MCP
+  settings" (verified 2026-09-22 on `wpcom-mcp-site`, where the `connection.*` operations were
+  off). This is reported explicitly rather than by silent absence, so read both arrays.
 - Claude Code handles OAuth 2.1 + PKCE + dynamic client registration natively for `type: "http"`
   servers, so there is no token to configure. If auth is the problem, it shows up as `/mcp` not
   connecting, not as a bad parameter.
@@ -248,17 +257,30 @@ publicly is the one unrecoverable mistake in this plugin.
 
 **Confirmation.** Write operations may require a confirmation flag (commonly `user_confirmed`). The
 honest pattern: compose the full record, show it to the user, get an explicit yes, then send the
-write with the flag set. Whether one confirmation covers a batch or is required per write is
-**unverified** — assume per-write, and set the flag on each call.
+write with the flag set. **Verified 2026-09-17: the flag is per write and does not carry**, so set
+it on every call. Batching several writes into one call is what lets one approval cover them.
+
+**Verified 2026-09-22: `user_confirmed` accepts the boolean `true`, or the strings `'true'`,
+`'yes'`, `'on'`, `'1'`, case-insensitive. It explicitly rejects a free-form approval phrase** —
+passing the user's actual words ("Yes, create it") fails the write. Extract their consent into one
+of the accepted forms.
+
+**Which writes need the flag is discoverable, not guesswork.** `action: list` on a facade returns a
+`safety_policy.applies_to` array naming the operations that require it. On `wpcom-mcp-site`
+(2026-09-22) that is `settings.update`, `theme.set`, `manage-site.launch`,
+`manage-site.set-visibility`, the `monitor.*` and `account-protection.*` toggles,
+`newsletter.update_settings`, `scan.run`, and the `connection.*` operations. Read the policy rather
+than assuming.
 
 **Timezone.** Site-local time is what the post date means. Confirm the site timezone once per
 session before computing any date.
 
-**Backdating.** Pass the event date on create rather than creating and then editing. Whether a
-backdated date is honored alongside a non-public status is load-bearing for history imports and is
-**unverified** — so after the first backdated write of a session, read the post back and confirm the
-stored date matches what you sent. If it was coerced to now, stop and tell the user before writing
-more.
+**Backdating.** Pass the event date on create rather than creating and then editing. **Verified
+2026-09-22:** a past date is honored alongside `private` and is not coerced to now.
+
+**`meta` is not storage for you.** `describe` lists it, so the unlisted-parameter rule misses it:
+only platform keys exist (SEO, newsletter, social), you cannot add one, and an unknown key returns
+`success` and stores nothing. Numbers go in the title and body.
 
 **Never send a future date.** WordPress converts it to a scheduled post, status `future`, which
 disappears from normal listings until that day arrives. If a date computes to the future because of
@@ -275,9 +297,10 @@ a replace is not undoable from the site — read the section first if the old co
   with filters over many get calls.
 - **Page explicitly.** Ask for a page size and keep requesting until a page comes back short. A
   first page that looks complete usually isn't.
-- **Search has unverified scope.** Whether the content-search operation covers non-public posts, and
-  whether it can filter by category or tag, is unverified. Until it's confirmed on the site you're
-  working with, build reporting on post listings with taxonomy filters, which definitely work.
+- **Search cannot see the record.** `content.search` covers published content only (verified
+  2026-09-22: a token inside a private post returns zero) and filters by post type, not taxonomy.
+  Every record here is `private`. Build all reporting on `posts.list` with `status` and taxonomy
+  filters.
 - **Status filters.** When listing, name the statuses you want. Defaults skew toward public content.
 
 ## Site visibility and launch ordering
@@ -303,19 +326,27 @@ settings as independent. Whether to launch is a product decision, not a privacy 
   `public` or `private`. `private` is strictly stronger, so this never matters here.
 - The visibility operation refuses to make a site private when it has active subscribers unless
   `user_confirmed: true` is passed. Read the subscriber count first rather than forcing it.
+- **Read privacy from `get_status` only.** Verified 2026-09-22: `wpcom-user-sites` reported
+  `is_private: false` for a site that `manage-site.status` and `settings.get` both reported private
+  at the same moment. An anonymous request returns HTTP **200** with a login wall, so a status code
+  is not evidence either.
 - Do not write anything sensitive until a **read-back** says `private`.
 
 If a site cannot be confirmed private, that is a stop condition, not a warning.
 
 ### What `settings.update` can and cannot write
 
-Writable: `blogname`, `blogdescription`, `blog_public` (−1 private / 0 public-discouraged / 1
-public), `timezone_string`, `date_format`, `time_format`, `start_of_week`, `default_role`,
-`users_can_register`, `comment_registration`, `show_on_front`, `page_on_front`.
+Writable, confirmed against the live `describe` on 2026-09-22: `blogname`, `blogdescription`,
+`blog_public` (−1 private / 0 public-discouraged / 1 public), `timezone_string`, `date_format`,
+`time_format`, `start_of_week`, `default_role`, `users_can_register`, `comment_registration`,
+`show_on_front`, `page_on_front`. `blogname` and `blogdescription` also accept the REST-convention
+aliases `name` and `description`; pass both forms and the canonical key wins.
 
 **Not writable — do not claim otherwise to the user:**
 
-- **`default_category`** doesn't exist. A site's default post category cannot be changed.
+- **`default_category`** doesn't exist — absent from the live schema, re-confirmed 2026-09-22. A
+  site's default post category cannot be changed, which is why `needs-triage` only ever catches what
+  a skill assigns to it explicitly.
 - **`default_comment_status` / `default_ping_status`** don't exist. **Comments and pingbacks cannot
   be disabled through the MCP.** `comment_registration: true` only requires a logged-in account.
   Point the user at Settings → Discussion in wp-admin.

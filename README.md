@@ -41,11 +41,11 @@ MCP is available on all paid WordPress.com plans. **Free sites get 30 days from 
 ## Repository layout
 
 ```
-.claude-plugin/marketplace.json   every plugin and skill declared inline
-plugins/<name>/.claude-plugin/plugin.json   the plugin's manifest: version + components
-plugins/<name>/                   one plugin = one use case
-plugins/<name>/skills/            SKILL.md per skill, bulk in references/
-plugins/<name>/.mcp.json          MCP servers the plugin needs
+.claude-plugin/marketplace.json             catalogue: name, source, description per plugin
+plugins/<name>/                             one plugin = one use case
+plugins/<name>/.claude-plugin/plugin.json   the manifest: version + declared components
+plugins/<name>/skills/                      SKILL.md per skill, bulk in references/
+plugins/<name>/.mcp.json                    MCP servers the plugin needs
 ```
 
 ## Adding a use case

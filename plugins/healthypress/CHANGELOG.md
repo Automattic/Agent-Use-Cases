@@ -2,6 +2,29 @@
 
 All notable changes to HealthyPress are documented here.
 
+## 0.2.3 — 2026-09-22
+
+### Fixed
+
+- **Records always get a category assigned explicitly.** `needs-triage` was described as the site's
+  default category. It is not, and cannot be made one through the MCP, so a record relying on it
+  could land outside the taxonomy.
+- **A record that saves wrong is now reported.** `/healthypress:log` checks the date, the private
+  status and the taxonomy after every write. Before, only a wrong date was flagged, so a record
+  left as a draft — invisible to every listing — passed silently.
+- **The "no structured numeric fields" limit is accurate.** The MCP exposes a post `meta` object,
+  but it takes only platform keys, and an unknown one is dropped silently while the write reports
+  success. Charting an A1c is still out of reach; attempting it no longer looks like it worked.
+- **Attachment privacy is accurate.** Media URLs on a private site return 403 anonymously, but
+  anyone granted access to the site can open the file — the actual reason to redact before
+  uploading.
+- **Setup shows the real URL before creating anything**, and says the title and URL are visible to
+  anyone reaching the login page. The URL strips punctuation, so `healthypress-vo` becomes
+  `healthypressvo`.
+
+Several of `health-record`'s claims about the WordPress.com MCP were also checked against the live
+service and corrected. Nothing else about how records are written changed.
+
 ## 0.2.2 — 2026-09-22
 
 Packaging only. Nothing about the skills, the schema, or the site changes.
