@@ -6,16 +6,24 @@ All notable changes to HealthyPress are documented here.
 
 ### Fixed
 
-- **Every record gets its category assigned explicitly.** `needs-triage` had been described as the
-  site's default category. It is not one, and WordPress.com does not let the MCP make it one, so a
-  record that relied on the default could land outside the health taxonomy altogether.
-- **The "no structured numeric fields" limit is stated accurately.** The MCP does expose a post
-  `meta` object, but it takes only platform keys, and an unknown one is dropped silently while the
-  write still reports success. Charting an A1c over time is still out of reach — what changed is
-  that attempting it no longer looks like it worked.
+- **Records always get a category assigned explicitly.** `needs-triage` was described as the site's
+  default category. It is not, and cannot be made one through the MCP, so a record relying on it
+  could land outside the taxonomy.
+- **A record that saves wrong is now reported.** `/healthypress:log` checks the date, the private
+  status and the taxonomy after every write. Before, only a wrong date was flagged, so a record
+  left as a draft — invisible to every listing — passed silently.
+- **The "no structured numeric fields" limit is accurate.** The MCP exposes a post `meta` object,
+  but it takes only platform keys, and an unknown one is dropped silently while the write reports
+  success. Charting an A1c is still out of reach; attempting it no longer looks like it worked.
+- **Attachment privacy is accurate.** Media URLs on a private site return 403 anonymously, but
+  anyone granted access to the site can open the file — the actual reason to redact before
+  uploading.
+- **Setup shows the real URL before creating anything**, and says the title and URL are visible to
+  anyone reaching the login page. The URL strips punctuation, so `healthypress-vo` becomes
+  `healthypressvo`.
 
-Also corrected several of `health-record`'s claims about the WordPress.com MCP against the live
-schema. Nothing about how records are written changed.
+Several of `health-record`'s claims about the WordPress.com MCP were also checked against the live
+service and corrected. Nothing else about how records are written changed.
 
 ## 0.2.2 — 2026-09-22
 
