@@ -62,7 +62,7 @@ Use these boundaries when deciding where information belongs:
 | Work session | One agent run or multi-agent bundle | `.agents/scratchpad/sessions/YYYY-MM-DD-{slug}/` |
 | Decision | A choice among meaningful alternatives | `.agents/decisions/YYYY-MM-DD-{slug}.md` |
 | Commit / PR | Atomic version-control unit | Git history, PR body, updated docs |
-| Release | User-visible shipped change set, per plugin. A merge to `trunk` is the release | that plugin's `version` in `.claude-plugin/marketplace.json` + `plugins/<name>/CHANGELOG.md` |
+| Release | User-visible shipped change set, per plugin. A merge to `trunk` is the release | that plugin's `version` in its `plugin.json` + `plugins/<name>/CHANGELOG.md` |
 
 ### Working with progress discipline
 
@@ -74,7 +74,7 @@ When you reach any of these milestones, graduate immediately — same commit as 
 - **Introduced an invariant** (property that must always hold)? → add to `DESIGN.md` Invariants.
 - **Chose among meaningful alternatives?** → add or update `.agents/decisions/YYYY-MM-DD-<slug>.md`; link it from `DESIGN.md` if it affects current architecture or invariants.
 - **Established or changed a code-shape pattern?** → add or update `.agents/reference/patterns/<area>.md`.
-- **Shipped user-visible behavior?** → bump that plugin's `version` and add its `CHANGELOG.md` entry, in the same commit. See [Versioning and releases](#versioning-and-releases).
+- **Shipped user-visible behavior?** → bump that plugin's `version` in its `plugin.json` and add its `CHANGELOG.md` entry, in the same commit. See [Versioning and releases](#versioning-and-releases).
 - **Moved roadmap state?** → update `ROADMAP.md` so "what next" stays accurate.
 - **Code changes?** → Conventional Commits + body explaining [Context] → [Problem] → [Solution]. Summarize linked resources inline (links break).
 
@@ -115,9 +115,9 @@ Before claiming work is complete, check whether this change requires updates to:
 
 ### Versioning and releases
 
-A merge to `trunk` **is** the release. There is no build, no publish step, and no staging branch: users refresh with `/plugin marketplace update`, which re-reads `.claude-plugin/marketplace.json` from the default branch, and a plugin entry whose `version` changed is the only thing that tells them an update exists. Nothing else ships a plugin, and nothing holds one back once it is merged.
+A merge to `trunk` **is** the release. There is no build, no publish step, and no staging branch: users refresh with `/plugin marketplace update`, which re-reads the marketplace from the default branch, and a plugin whose `version` changed is the only thing that tells them an update exists. Nothing else ships a plugin, and nothing holds one back once it is merged.
 
-**RULE 0: every commit that changes a plugin's behavior bumps that plugin's `version` in `.claude-plugin/marketplace.json` and adds a `CHANGELOG.md` entry under that version.** Size the bump by commit type — `feat` = minor, `fix`/`refactor`/`perf` = patch, a breaking change = major. A change only a contributor would notice needs neither: `docs`, `test`, `ci`, `style`, `chore`, and anything under `.agents/`.
+**RULE 0: every commit that changes a plugin's behavior bumps that plugin's `version` in `plugins/<name>/.claude-plugin/plugin.json` and adds a `CHANGELOG.md` entry under that version.** The version lives in the manifest and nowhere else. Never also set it on the marketplace entry: Claude Code takes the manifest's value without warning, so a second copy can only go stale and mask the one you edited. Size the bump by commit type — `feat` = minor, `fix`/`refactor`/`perf` = patch, a breaking change = major. A change only a contributor would notice needs neither: `docs`, `test`, `ci`, `style`, `chore`, and anything under `.agents/`.
 
 While the bump is still unmerged, fold further changes of similar impact into that same version rather than bumping again; a higher-impact change upgrades it. Once it is on `trunk` it is released, so the next behavior change opens a new version. That is why there is no `[Unreleased]` section here: a heading is written with both its version and its date in the same commit as the change, and merging publishes it.
 
@@ -127,7 +127,7 @@ Before merging:
 
 ```bash
 claude plugin validate .claude-plugin/marketplace.json
-claude plugin validate plugins/<name>
+claude plugin validate plugins/<name> --strict
 ```
 
 After merging, because `--plugin-dir` never reads the marketplace entry and so cannot catch a bad one:
@@ -137,12 +137,13 @@ claude plugin marketplace update wordpress-agent-use-cases
 claude plugin update <name>@wordpress-agent-use-cases
 claude plugin list                                       # the plugin's line: resolved version, or ✘ failed to load
 claude plugin details <name>@wordpress-agent-use-cases   # the inventory users actually get
-claude plugin tag plugins/<name> --push                  # creates <name>--v<version>
 ```
 
-`claude plugin details` works only on an installed plugin, and it is the gate that catches a stray `skills/` directory shipping, because every `SKILL.md` under `skills/` loads whether or not the entry lists it. `claude plugin tag` validates that what it tags agrees with the marketplace entry. A marketplace entry can be valid and still fail to load — healthypress 0.2.0 did — so the post-merge check is not optional.
+`claude plugin details` works only on an installed plugin, and it is the gate that catches a stray `skills/` directory shipping, because every `SKILL.md` under `skills/` loads whether or not the manifest lists it. Manifests can validate and the plugin still fail to load — healthypress 0.2.0 did — so the post-merge check is not optional.
 
-The marketplace manifest carries no version of its own, and the plugin entry's `version` is the sole update signal. See [`.agents/decisions/2026-09-22-per-plugin-versioning-and-releases.md`](.agents/decisions/2026-09-22-per-plugin-versioning-and-releases.md).
+Releases are not tagged. A `<name>--v<version>` tag serves exactly one purpose, resolving another plugin's declared dependency on this one, and no plugin here declares dependencies. Start tagging the day one does, with `claude plugin tag plugins/<name> --push`, and tag the earlier releases it needs to resolve against.
+
+The marketplace carries no version of its own, and the plugin manifest's `version` is the sole update signal. See [`.agents/decisions/2026-09-22-per-plugin-versioning-and-releases.md`](.agents/decisions/2026-09-22-per-plugin-versioning-and-releases.md) and [`.agents/decisions/2026-09-22-plugin-manifest-ownership.md`](.agents/decisions/2026-09-22-plugin-manifest-ownership.md).
 
 ## Scratchpad
 

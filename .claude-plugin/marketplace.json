@@ -9,15 +9,7 @@
     {
       "name": "healthypress",
       "description": "Run a private WordPress.com site as a personal health record: creates a dedicated privacy-hardened site with a closed health taxonomy, then records each event as a private, dated, tagged post. Records and organizes; never diagnoses or advises.",
-      "source": "./plugins/healthypress",
-      "version": "0.2.1",
-      "license": "GPL-3.0-or-later",
-      "mcpServers": "./.mcp.json",
-      "skills": [
-        "./skills/setup",
-        "./skills/log",
-        "./skills/health-record"
-      ]
+      "source": "./plugins/healthypress"
     }
   ]
 }

@@ -1,8 +1,10 @@
 # 2026-09-22 - Per-plugin versioning, and the marketplace manifest carries no version
 
-Status: Accepted
+Status: Accepted, partly superseded
 Date: 2026-09-22
 Deciders: Vlad Olaru, with Claude
+
+> **Partly superseded** by [2026-09-22 — The plugin manifest owns the plugin's definition](2026-09-22-plugin-manifest-ownership.md). The release model, RULE 0, the no-`[Unreleased]` convention, and the removal of the marketplace version all still stand. What changed: the plugin's `version` moved from the marketplace entry to the plugin's own `plugin.json`, and the tagging step below was dropped entirely.
 
 ## Context
 
@@ -38,13 +40,11 @@ The full procedure lives in `AGENTS.md` § Versioning and releases. This record 
 
 **A separate `docs/releasing.md` runbook.** Rejected as too far from where the rule is needed. The procedure is short, and `AGENTS.md` is auto-loaded at session start while `docs/` is read on a trigger.
 
-**Adopt the sibling's `<plugin>/v<semver>` tag format.** Rejected in favor of `claude plugin tag`, which ships with Claude Code, produces `{name}--v{version}`, and validates that the manifest and the enclosing marketplace entry agree.
+**Adopt the sibling's `<plugin>/v<semver>` tag format.** Rejected in favor of `claude plugin tag`, which ships with Claude Code and produces `{name}--v{version}`. *Superseded: the repo does not tag at all. A `{name}--v{version}` tag exists only so Claude Code can resolve another plugin's declared dependency, and nothing here declares one.*
 
 ## Consequences
 
 The release rule is now one procedure in one place, with a bump-size policy an agent can apply without judgment calls, and the `[Unreleased]` contradiction is gone.
-
-Tagging becomes a real step for the first time — this repo has no tags at all today, so the first `claude plugin tag` starts the series mid-history at `healthypress--v0.2.1`.
 
 Verification moves after the merge, which is new and slightly uncomfortable: `claude plugin validate` passes manifests that still fail to load, and the dev loop's `--plugin-dir` never reads the marketplace entry, so neither can catch a bad entry. Writing this record surfaced a live instance — `strict: false`, added to the healthypress entry in 3f34958 with no version bump, made every installed copy fail with "conflicting manifests", because Claude Code synthesizes a `plugin.json` into the cached copy from the entry. Fixed in 0.2.1, and recorded in `docs/plugin-mechanics.md`. The post-merge `claude plugin list` check exists because of it.
 
@@ -58,4 +58,4 @@ Still unguarded: nothing enforces RULE 0. There is no CI in this repo, so the ru
 - Related scratchpad session: `.agents/scratchpad/journal/2026-09-22-release-instructions-and-metadata-version.md`, extending `.agents/scratchpad/journal/2026-09-22-claude-code-plugins-comparison.md`
 - Official sources: `https://code.claude.com/docs/en/plugin-marketplaces.md` § Marketplace schema, § Strict mode; `https://code.claude.com/docs/en/plugins-reference.md` § Version management; `https://json.schemastore.org/claude-code-marketplace.json`
 - Supersedes:
-- Superseded by:
+- Superseded by: partly, [2026-09-22-plugin-manifest-ownership.md](2026-09-22-plugin-manifest-ownership.md)

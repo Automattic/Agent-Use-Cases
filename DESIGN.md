@@ -28,13 +28,14 @@ Two audiences: people who want a job done and install one plugin; contributors w
 
 ## Architecture
 
-Five layers, top to bottom:
+Six layers, top to bottom:
 
-1. `.claude-plugin/marketplace.json` — declares every plugin and, inline, every skill path. The marketplace is the repo.
-2. `plugins/<name>/` — one use case: `README.md`, `CHANGELOG.md`, `.mcp.json`, and `skills/`.
-3. `skills/<skill>/SKILL.md` — a workflow the user invokes, or reference knowledge that loads behind one. Bulk material sits in the skill's `references/`.
-4. The WordPress.com MCP server at `https://public-api.wordpress.com/wpcom/v2/mcp/v1` — a handful of facade tools, each selecting behavior with an `operation` and an `action`; `list` and `describe` expose the live schema.
-5. A WordPress.com site — the substrate, addressed only through core primitives: posts, pages, categories, tags, media, roles, post status, site settings.
+1. `.claude-plugin/marketplace.json` — a catalogue: for each plugin, its name and where to find it. The marketplace is the repo.
+2. `plugins/<name>/.claude-plugin/plugin.json` — the plugin's own manifest, and the authority on what the plugin is: its version, its metadata, and every component it declares.
+3. `plugins/<name>/` — one use case: `README.md`, `CHANGELOG.md`, `.mcp.json`, and `skills/`.
+4. `skills/<skill>/SKILL.md` — a workflow the user invokes, or reference knowledge that loads behind one. Bulk material sits in the skill's `references/`.
+5. The WordPress.com MCP server at `https://public-api.wordpress.com/wpcom/v2/mcp/v1` — a handful of facade tools, each selecting behavior with an `operation` and an `action`; `list` and `describe` expose the live schema.
+6. A WordPress.com site — the substrate, addressed only through core primitives: posts, pages, categories, tags, media, roles, post status, site settings.
 
 Nothing in the repo executes. The agent is the runtime; the skills are its instructions; the MCP is its only hand on the site.
 
@@ -42,12 +43,13 @@ Nothing in the repo executes. The agent is the runtime; the skills are its instr
 
 Each of these holds today and is easy to break by accident. Each follows from the platform or from a non-goal, not from how any one plugin happens to be built.
 
-1. **A plugin contains only Markdown and `.mcp.json`.** No executable code of any kind.
+1. **A plugin contains only Markdown, `.mcp.json`, and `plugin.json`.** No executable code of any kind.
 2. **Every site read and write goes through the WordPress.com MCP.** Bash is permitted only to open the OAuth URL in the user's browser.
 3. **Facade parameters are never hardcoded.** A skill `describe`s an operation before its first use in a session and passes exactly what the live schema names. A parameter absent from `describe` does not exist.
 4. **Every write is read back.** A success response is not evidence that the write landed; the MCP has returned `success: true` for writes that changed nothing.
-5. **Every `allowed-tools` that names a `wpcom` tool lists both the `mcp__wpcom__*` and `mcp__plugin_<name>_wpcom__*` forms.** A single-prefix skill breaks depending on how the server was installed. Skill registration is not an invariant: every `SKILL.md` under `skills/` loads whether or not the `skills` array lists it (verified at v2.1.278, see `docs/plugin-mechanics.md`).
-6. **A change to a plugin's behavior bumps that plugin's `version` in `marketplace.json` and adds an entry to that plugin's `CHANGELOG.md`.** There is no root changelog: the plugin is the unit a user installs, so it is the unit a version and a changelog describe. The marketplace manifest carries no version of its own, and the plugin entry's `version` is the sole update signal — see `AGENTS.md` § Versioning and releases.
+5. **Every `allowed-tools` that names a `wpcom` tool lists both the `mcp__wpcom__*` and `mcp__plugin_<name>_wpcom__*` forms.** A single-prefix skill breaks depending on how the server was installed. Skill registration is not an invariant: every `SKILL.md` under `skills/` loads whether or not the manifest's `skills` array lists it (verified at v2.1.278, see `docs/plugin-mechanics.md`).
+6. **A change to a plugin's behavior bumps that plugin's `version` in its `plugin.json` and adds an entry to that plugin's `CHANGELOG.md`.** There is no root changelog: the plugin is the unit a user installs, so it is the unit a version and a changelog describe. The version appears in the manifest and nowhere else — not on the marketplace entry, which Claude Code would silently lose to the manifest, and not on the marketplace itself, which has no version — see `AGENTS.md` § Versioning and releases.
+7. **A plugin's components are declared in its own `plugin.json`, never on its marketplace entry.** The entry carries only `name`, `source`, and display fields. Claude Code synthesizes a manifest from an entry that declares components, which collides with a real one; keeping the two disjoint makes that collision impossible.
 
 ### Promotion rule
 
@@ -55,7 +57,8 @@ A property becomes an invariant only when it follows directly from a non-goal or
 
 ## Decision index
 
-- [2026-09-22 — Per-plugin versioning, and the marketplace manifest carries no version](.agents/decisions/2026-09-22-per-plugin-versioning-and-releases.md). Affects invariant 6 and the release model.
+- [2026-09-22 — Per-plugin versioning, and the marketplace manifest carries no version](.agents/decisions/2026-09-22-per-plugin-versioning-and-releases.md). Affects invariant 6 and the release model. Partly superseded by the record below, which moved the version out of the marketplace entry.
+- [2026-09-22 — The plugin manifest owns the plugin's definition](.agents/decisions/2026-09-22-plugin-manifest-ownership.md). Affects invariants 1, 6, and 7, and the Architecture layering.
 
 Other candidates, each currently living only in `plugins/healthypress` prose: knowledge-not-code; WordPress.com-only; posts-as-the-whole-record; setup-always-creates-a-new-site. The first two are repo-level and will get records when they are next questioned; the last two are healthypress decisions unless a second plugin makes the same choice.
 
