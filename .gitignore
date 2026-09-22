@@ -1,0 +1,36 @@
+# --- macOS ---
+.DS_Store
+
+# --- Claude Code local state ---
+.claude/settings.local.json
+
+# --- Agent working artifacts ---
+# Durable agent/human project memory under .agents/project-management.md,
+# .agents/decisions/, and .agents/reference/ is tracked by default.
+# Private local overlays for public/open-source repos
+.agents/project-management.local.md
+.agents/private/**
+# Scratchpad: ship TEMPLATE.md (frontmatter skeleton) + each subdir's .gitkeep so the convention is self-documenting on fresh clone; ignore actual notes
+.agents/scratchpad/**
+!.agents/scratchpad/**/
+!.agents/scratchpad/TEMPLATE.md
+!.agents/scratchpad/**/.gitkeep
+# Tmp: ship the dir (via .gitkeep) but ignore everything inside it
+.agents/tmp/*
+!.agents/tmp/.gitkeep
+
+# --- mdsrc local state ---
+.mdsrc/
+
+# --- Codex local state ---
+.codex/
+
+# --- IDE ---
+.idea/
+.vscode/
+
+# --- Temp / logs (root-anchored so they don't accidentally match nested dirs like .agents/tmp/) ---
+/.tmp/
+/tmp/
+*.log
+/logs/

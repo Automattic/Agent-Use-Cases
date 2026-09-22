@@ -49,10 +49,13 @@ plugins/<name>/.mcp.json          MCP servers the plugin needs
 
 ## Adding a use case
 
-Create `plugins/<your-use-case>/` and register every skill path in
-`.claude-plugin/marketplace.json` — a skill directory missing from that array is silently disabled,
-with no error. Bump the plugin `version` and the marketplace `metadata.version` together, and add a
-CHANGELOG entry.
+Create `plugins/<your-use-case>/` with a `README.md`, a `CHANGELOG.md`, an `.mcp.json`, and one
+`skills/<skill>/SKILL.md` per skill, then add the plugin to `.claude-plugin/marketplace.json`.
+Every `SKILL.md` under `skills/` loads on its own; the entry's `skills` array only matters for
+skills kept elsewhere. Run `claude plugin validate .claude-plugin/marketplace.json` before you
+commit. Every change to a plugin's behavior bumps that plugin's `version` in `marketplace.json`
+and adds an entry to its `CHANGELOG.md` — users receive an update only when that version changes.
+The dev loop and the verified plugin mechanics are in [`docs/plugin-mechanics.md`](docs/plugin-mechanics.md).
 
 Two rules carry most of the weight. **Core WordPress only**: if a use case needs a custom post type,
 it isn't an agent use case. And **never hardcode an MCP facade's parameters** — `describe` the
