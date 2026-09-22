@@ -108,14 +108,9 @@ If they want changes, revise and read it back again. Loop until they confirm or 
 explicitly `private`** and the computed date. Posts default to draft, and a draft is invisible to
 listings and reports; `private` also avoids triggering subscription email.
 
-Read the created post back and verify: stored date matches what you sent (backdating can be
-coerced), status is `private`, category and tags are attached. If the date came back as now instead
-of the date you sent, tell the user before writing anything else:
-
-> WordPress stored this record at `<actual>` instead of `<intended>`. Backdating isn't behaving as
-> expected on this site, so I've stopped. The record exists but has the wrong date.
-
-Then STOP.
+Read the created post back and verify three things: the stored date matches what you sent, the
+status is `private`, and the category and tags are attached. If any differ, stop and tell the user
+which one before writing anything else.
 
 ## Step 8: Attachments, if any
 
