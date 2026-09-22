@@ -46,7 +46,7 @@ Each of these holds today and is easy to break by accident. Each follows from th
 2. **Every site read and write goes through the WordPress.com MCP.** Bash is permitted only to open the OAuth URL in the user's browser.
 3. **Facade parameters are never hardcoded.** A skill `describe`s an operation before its first use in a session and passes exactly what the live schema names. A parameter absent from `describe` does not exist.
 4. **Every write is read back.** A success response is not evidence that the write landed; the MCP has returned `success: true` for writes that changed nothing.
-5. **Every skill directory is declared in its plugin's `skills` array in `marketplace.json`, and every `allowed-tools` lists both `mcp__wpcom__*` and `mcp__plugin_<name>_wpcom__*` forms.** An undeclared skill is silently disabled; a single-prefix skill breaks depending on how the server was installed.
+5. **Every `allowed-tools` that names a `wpcom` tool lists both the `mcp__wpcom__*` and `mcp__plugin_<name>_wpcom__*` forms.** A single-prefix skill breaks depending on how the server was installed. Skill registration is not an invariant: every `SKILL.md` under `skills/` loads whether or not the `skills` array lists it (verified at v2.1.278, see `docs/plugin-mechanics.md`).
 6. **A change to a plugin's behavior bumps that plugin's `version` in `marketplace.json` and adds an entry to that plugin's `CHANGELOG.md`.** There is no root changelog: the plugin is the unit a user installs, so it is the unit a version and a changelog describe.
 
 ### Promotion rule
