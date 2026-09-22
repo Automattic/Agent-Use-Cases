@@ -58,7 +58,7 @@ Hierarchical, closed, exactly one leaf per post. Created once by `/healthypress:
 | `conditions` | `diagnosis`, `resolution` |
 | `care-admin` | `insurance`, `referral`, `records` |
 | `symptoms`, `allergies`, `immunizations`, `journal` | (no children) |
-| `needs-triage` | the site default category, so uncategorized records stay findable |
+| `needs-triage` | where a record goes when no leaf fits. **Not** the site default — `default_category` is not writable through the MCP, so this only catches records `/healthypress:log` assigns to it explicitly |
 
 Agents may not invent categories. A record that doesn't fit goes in the nearest leaf with a note in
 `## Details`. If a record wants two kinds, it is two records.
@@ -161,8 +161,9 @@ Mechanics of the server at `https://public-api.wordpress.com/wpcom/v2/mcp/v1`.
 
 ## The facade pattern
 
-There is no `wpcom_create_post` tool. The server exposes roughly eight **facade** tools, each
-covering a domain, and you select behavior with an `operation` parameter plus an `action`:
+There is no `wpcom_create_post` tool. The server exposes **facade** tools — 28 of them when last
+counted, on 2026-09-22 — each covering a domain, and you select behavior with an `operation`
+parameter plus an `action`. Four matter here:
 
 - `wpcom-mcp-site` — site settings, status, launch, visibility
 - `wpcom-mcp-content-authoring` — posts, pages, categories, tags, media, sections, search
@@ -248,8 +249,8 @@ publicly is the one unrecoverable mistake in this plugin.
 
 **Confirmation.** Write operations may require a confirmation flag (commonly `user_confirmed`). The
 honest pattern: compose the full record, show it to the user, get an explicit yes, then send the
-write with the flag set. Whether one confirmation covers a batch or is required per write is
-**unverified** — assume per-write, and set the flag on each call.
+write with the flag set. **Verified 2026-09-17: the flag is per write and does not carry**, so set
+it on every call. Batching several writes into one call is what lets one approval cover them.
 
 **Timezone.** Site-local time is what the post date means. Confirm the site timezone once per
 session before computing any date.

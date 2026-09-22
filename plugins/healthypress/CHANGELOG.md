@@ -2,6 +2,24 @@
 
 All notable changes to HealthyPress are documented here.
 
+## 0.2.3 — 2026-09-22
+
+### Fixed
+
+- **`needs-triage` is no longer described as the site default category.** It never was one:
+  `default_category` is not writable through the MCP, which `health-record` said plainly 250 lines
+  below the table that claimed the opposite. An agent that trusted the default could skip assigning
+  a category, and the post would land in WordPress's own `Uncategorized`, outside the closed
+  taxonomy where nothing in the schema would find it again. Both the skill and
+  `references/taxonomy.md` now say the leaf only catches what `/healthypress:log` assigns to it.
+- **The facade count is 28, not "roughly eight".** The real number was established on the first
+  live run and recorded in this changelog for 0.1.2; the skill was never updated. Re-counted
+  2026-09-22.
+- **`user_confirmed` is no longer flagged unverified.** It was answered on 2026-09-17 — the flag is
+  per write and does not carry — and `/healthypress:setup` already relied on that as fact. A stale
+  `unverified` label on a settled question devalues the flags on the four questions that are still
+  genuinely open.
+
 ## 0.2.2 — 2026-09-22
 
 Packaging only. Nothing about the skills, the schema, or the site changes.

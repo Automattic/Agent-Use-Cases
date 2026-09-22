@@ -2,7 +2,7 @@
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "healthypress",
   "description": "Run a private WordPress.com site as a personal health record: creates a dedicated privacy-hardened site with a closed health taxonomy, then records each event as a private, dated, tagged post. Records and organizes; never diagnoses or advises.",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "author": {
     "name": "Automattic"
   },
