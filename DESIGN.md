@@ -47,7 +47,7 @@ Each of these holds today and is easy to break by accident. Each follows from th
 3. **Facade parameters are never hardcoded.** A skill `describe`s an operation before its first use in a session and passes exactly what the live schema names. A parameter absent from `describe` does not exist.
 4. **Every write is read back.** A success response is not evidence that the write landed; the MCP has returned `success: true` for writes that changed nothing.
 5. **Every skill directory is declared in its plugin's `skills` array in `marketplace.json`, and every `allowed-tools` lists both `mcp__wpcom__*` and `mcp__plugin_<name>_wpcom__*` forms.** An undeclared skill is silently disabled; a single-prefix skill breaks depending on how the server was installed.
-6. **A plugin's `version` and the marketplace `metadata.version` bump together, with a `CHANGELOG.md` entry.**
+6. **A change to a plugin's behavior bumps that plugin's `version` in `marketplace.json` and adds an entry to that plugin's `CHANGELOG.md`.** There is no root changelog: the plugin is the unit a user installs, so it is the unit a version and a changelog describe.
 
 ### Promotion rule
 
@@ -61,4 +61,5 @@ None yet. Candidates, each currently living only in `plugins/healthypress` prose
 
 - The generic MCP mechanics — facade pattern, auth handshake, write and read gotchas — live inside `plugins/healthypress/skills/health-record`. That is repo-level knowledge in one plugin. The second plugin will either copy it or force a decision on where shared knowledge lives.
 - There is no way to test a skill against the live MCP. Facade drift is found by users.
+- What the marketplace `metadata.version` means. `README.md` says to bump it together with the plugin version, which only has one reading while there is one plugin. Either it tracks the marketplace itself and changes rarely, or it goes.
 - The second use case should be deliberately unlike the first — public rather than private, current-state rather than event-logged, low-stakes rather than sensitive — so that healthypress conventions get tested rather than confirmed by repetition.

@@ -29,7 +29,7 @@ The repo is the marketplace. `.claude-plugin/marketplace.json` declares every pl
 |---------|----------|----------|
 | `DESIGN.md` | Human + Agent | Architecture, **Invariants**, current-state source of truth. **If code contradicts DESIGN.md, DESIGN wins (or DESIGN is updated).** |
 | `README.md` | Human + Agent | Project intro for visitors |
-| `CHANGELOG.md` | Human + Agent | User-visible changes ([Keep a Changelog](https://keepachangelog.com/en/1.1.0/)) |
+| `plugins/<name>/CHANGELOG.md` | Human + Agent | That plugin's user-visible changes ([Keep a Changelog](https://keepachangelog.com/en/1.1.0/)). There is no root changelog. |
 | `ROADMAP.md` | Human + Agent | Shaped / in-flight features — "what next" for autonomous agents |
 | `IDEAS.md` | Human + Agent | Pre-decision sparks; promote to `ROADMAP.md` when shaped |
 | `FOLLOW_UPS.md` | Human + Agent | Deferred items |
@@ -62,7 +62,7 @@ Use these boundaries when deciding where information belongs:
 | Work session | One agent run or multi-agent bundle | `.agents/scratchpad/sessions/YYYY-MM-DD-{slug}/` |
 | Decision | A choice among meaningful alternatives | `.agents/decisions/YYYY-MM-DD-{slug}.md` |
 | Commit / PR | Atomic version-control unit | Git history, PR body, updated docs |
-| Release | User-visible shipped change set | `CHANGELOG.md` |
+| Release | User-visible shipped change set, per plugin | `plugins/<name>/CHANGELOG.md` |
 
 ### Working with progress discipline
 
@@ -74,11 +74,11 @@ When you reach any of these milestones, graduate immediately — same commit as 
 - **Introduced an invariant** (property that must always hold)? → add to `DESIGN.md` Invariants.
 - **Chose among meaningful alternatives?** → add or update `.agents/decisions/YYYY-MM-DD-<slug>.md`; link it from `DESIGN.md` if it affects current architecture or invariants.
 - **Established or changed a code-shape pattern?** → add or update `.agents/reference/patterns/<area>.md`.
-- **Shipped user-visible behavior?** → append to `CHANGELOG.md` `[Unreleased]`.
+- **Shipped user-visible behavior?** → append to that plugin's `CHANGELOG.md` `[Unreleased]`.
 - **Moved roadmap state?** → update `ROADMAP.md` so "what next" stays accurate.
 - **Code changes?** → Conventional Commits + body explaining [Context] → [Problem] → [Solution]. Summarize linked resources inline (links break).
 
-What's left in `.agents/scratchpad/sessions/{slug}/` after graduation is, by definition, transient. It dies on fresh clone — by design. The institutional record lives in commits, `DESIGN.md`, `.agents/project-management.md`, `.agents/decisions/`, `.agents/reference/`, `ROADMAP.md`, and `CHANGELOG.md`.
+What's left in `.agents/scratchpad/sessions/{slug}/` after graduation is, by definition, transient. It dies on fresh clone — by design. The institutional record lives in commits, `DESIGN.md`, `.agents/project-management.md`, `.agents/decisions/`, `.agents/reference/`, `ROADMAP.md`, and each plugin's `CHANGELOG.md`.
 
 ### Decision records
 
@@ -103,7 +103,7 @@ Before claiming work is complete, check whether this change requires updates to:
 - `.agents/decisions/` — a meaningful choice was made among alternatives.
 - `.agents/reference/patterns/` — a repeated or canonical code shape changed.
 - `.agents/project-management.md` — tracker source of truth, issue workflow, or public/private coordination policy changed.
-- `CHANGELOG.md` — user-visible behavior changed.
+- the plugin's `CHANGELOG.md` — that plugin's user-visible behavior changed.
 - `ROADMAP.md` — work moved between Planned, In progress, and Shipped.
 
 ### Commit discipline

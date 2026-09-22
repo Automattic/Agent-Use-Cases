@@ -35,7 +35,7 @@ There is no external issue tracker configured for this project. `ROADMAP.md` is 
 ## During work
 
 - Keep tracker status in sync when meaningful: started, blocked, ready for review, done.
-- Add discoveries to scratchpad first; promote durable findings to `DESIGN.md`, `.agents/decisions/`, `.agents/reference/`, `ROADMAP.md`, or `CHANGELOG.md`.
+- Add discoveries to scratchpad first; promote durable findings to `DESIGN.md`, `.agents/decisions/`, `.agents/reference/`, `ROADMAP.md`, or the plugin's `CHANGELOG.md`.
 - Link decision records and PRs back to the issue when useful and allowed by repository visibility.
 
 ## Closing issue work
