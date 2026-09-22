@@ -122,8 +122,9 @@ For each file the user wants attached:
 - Attach to this one post and list it under `## Attachments`.
 - Do not transcribe the whole document. Extract the required `## Details` keys, quote any Impression
   verbatim, and note `full document attached (<n> pages)`.
-- Remind the user once per session: **media URLs on a private site are not verified to be
-  protected.** Redact MRNs, full date of birth, insurance IDs, and addresses before uploading.
+- Remind the user once per session: a private site's media URLs return 403 to anonymous requests,
+  but anyone granted access to the site can open the file. Redact MRNs, full date of birth,
+  insurance IDs, and addresses before uploading.
 
 ## Step 9: Report
 
