@@ -47,7 +47,7 @@ There is no external issue tracker configured for this project. `ROADMAP.md` is 
 
 ## Naming and linking
 
-- Branch:
-- Commit reference:
-- PR title:
-- Issue closure keyword:
+- Branch: `<type>/<short-slug>`, matching the Conventional Commits type of the work — `fix/healthypress-strict-mode`, `refactor/plugin-manifest`, `docs/record-manifest-verification`. Never work on `trunk`.
+- Commit reference: `Refs <id>` in a commit body. There is no external tracker, so this is usually a GitHub issue number or nothing at all.
+- PR title: imperative and specific, no Conventional Commits prefix and no issue number — "Restore healthypress loading and document the release procedure".
+- Issue closure keyword: `Closes #<n>` in the PR body, never in a commit message.
