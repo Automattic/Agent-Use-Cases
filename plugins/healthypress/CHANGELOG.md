@@ -6,39 +6,16 @@ All notable changes to HealthyPress are documented here.
 
 ### Fixed
 
-- **`needs-triage` is no longer described as the site default category.** It never was one:
-  `default_category` is not writable through the MCP, which `health-record` said plainly 250 lines
-  below the table that claimed the opposite. An agent that trusted the default could skip assigning
-  a category, and the post would land in WordPress's own `Uncategorized`, outside the closed
-  taxonomy where nothing in the schema would find it again. Both the skill and
-  `references/taxonomy.md` now say the leaf only catches what `/healthypress:log` assigns to it.
-- **The facade count is 28, not "roughly eight".** The real number was established on the first
-  live run and recorded in this changelog for 0.1.2; the skill was never updated. Re-counted
-  2026-09-22.
-- **`user_confirmed` is no longer flagged unverified.** It was answered on 2026-09-17 — the flag is
-  per write and does not carry — and `/healthypress:setup` already relied on that as fact. A stale
-  `unverified` label on a settled question devalues the flags on the four questions that are still
-  genuinely open.
+- **Every record gets its category assigned explicitly.** `needs-triage` had been described as the
+  site's default category. It is not one, and WordPress.com does not let the MCP make it one, so a
+  record that relied on the default could land outside the health taxonomy altogether.
+- **The "no structured numeric fields" limit is stated accurately.** The MCP does expose a post
+  `meta` object, but it takes only platform keys, and an unknown one is dropped silently while the
+  write still reports success. Charting an A1c over time is still out of reach — what changed is
+  that attempting it no longer looks like it worked.
 
-### Added
-
-Four facts from a live read-only pass over the MCP schema on 2026-09-22 (`list` and `describe`
-only; no site was touched).
-
-- **`user_confirmed` accepts the boolean `true` or the strings `'true'`, `'yes'`, `'on'`, `'1'`,
-  and explicitly rejects a free-form approval phrase.** Passing the user's actual words — "Yes,
-  create it" — fails the write.
-- **Which operations require confirmation is discoverable.** `action: list` returns a
-  `safety_policy.applies_to` array naming them, so it no longer has to be assumed.
-- **An operation can be disabled per account**, and `list` says so in a `disabled_operations` array
-  with a reason, rather than the operation going silently missing. The skill previously knew only
-  about role-based absence.
-- **`describe` is site-gated on `wpcom-mcp-content-authoring`** but not on `wpcom-mcp-site`, so a
-  site has to be resolved before content schemas can be discovered.
-
-The same pass confirmed the `settings.update` writable field list exactly as documented, and
-confirmed by absence that `default_category`, `default_comment_status`, and `default_ping_status`
-are not writable.
+Also corrected several of `health-record`'s claims about the WordPress.com MCP against the live
+schema. Nothing about how records are written changed.
 
 ## 0.2.2 — 2026-09-22
 

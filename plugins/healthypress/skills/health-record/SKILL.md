@@ -281,6 +281,10 @@ backdated date is honored alongside a non-public status is load-bearing for hist
 stored date matches what you sent. If it was coerced to now, stop and tell the user before writing
 more.
 
+**`meta` is not storage for you.** `describe` lists it, so the unlisted-parameter rule misses it:
+only platform keys exist (SEO, newsletter, social), you cannot add one, and an unknown key returns
+`success` and stores nothing. Numbers go in the title and body.
+
 **Never send a future date.** WordPress converts it to a scheduled post, status `future`, which
 disappears from normal listings until that day arrives. If a date computes to the future because of
 a timezone mismatch, fix the timezone, not the date.
