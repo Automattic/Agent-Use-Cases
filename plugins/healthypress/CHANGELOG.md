@@ -20,6 +20,26 @@ All notable changes to HealthyPress are documented here.
   `unverified` label on a settled question devalues the flags on the four questions that are still
   genuinely open.
 
+### Added
+
+Four facts from a live read-only pass over the MCP schema on 2026-09-22 (`list` and `describe`
+only; no site was touched).
+
+- **`user_confirmed` accepts the boolean `true` or the strings `'true'`, `'yes'`, `'on'`, `'1'`,
+  and explicitly rejects a free-form approval phrase.** Passing the user's actual words — "Yes,
+  create it" — fails the write.
+- **Which operations require confirmation is discoverable.** `action: list` returns a
+  `safety_policy.applies_to` array naming them, so it no longer has to be assumed.
+- **An operation can be disabled per account**, and `list` says so in a `disabled_operations` array
+  with a reason, rather than the operation going silently missing. The skill previously knew only
+  about role-based absence.
+- **`describe` is site-gated on `wpcom-mcp-content-authoring`** but not on `wpcom-mcp-site`, so a
+  site has to be resolved before content schemas can be discovered.
+
+The same pass confirmed the `settings.update` writable field list exactly as documented, and
+confirmed by absence that `default_category`, `default_comment_status`, and `default_ping_status`
+are not writable.
+
 ## 0.2.2 — 2026-09-22
 
 Packaging only. Nothing about the skills, the schema, or the site changes.

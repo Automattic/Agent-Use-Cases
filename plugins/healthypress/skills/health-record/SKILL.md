@@ -178,6 +178,10 @@ Every facade supports two meta actions: `action: list` enumerates the operations
 **The documentation is explicit that schemas evolve and the live `describe` response is the source
 of truth.** So:
 
+**`describe` on `wpcom-mcp-content-authoring` is site-gated** (verified 2026-09-22): it needs a real
+`wpcom_site`, and an unknown one fails with "Site not found" before any schema comes back.
+`wpcom-mcp-site` describes without one. So resolve the site first, then discover content schemas.
+
 > **Never hardcode a facade's parameter names from memory or from a document, including this one.
 > `describe` the operation before its first use in a session, and pass exactly the parameters the
 > live schema names.**
@@ -236,6 +240,10 @@ Skills that call these tools must list `authenticate` and `complete_authenticati
 - Tool availability also respects the connected user's WordPress role. An operation missing from
   `list` may be a permissions artifact rather than a server change — check the role before concluding
   the feature is gone.
+- **An operation can also be switched off per account.** `list` returns a `disabled_operations`
+  array alongside the live ones, each with a reason such as "This operation is disabled in your MCP
+  settings" (verified 2026-09-22 on `wpcom-mcp-site`, where the `connection.*` operations were
+  off). This is reported explicitly rather than by silent absence, so read both arrays.
 - Claude Code handles OAuth 2.1 + PKCE + dynamic client registration natively for `type: "http"`
   servers, so there is no token to configure. If auth is the problem, it shows up as `/mcp` not
   connecting, not as a bad parameter.
@@ -251,6 +259,18 @@ publicly is the one unrecoverable mistake in this plugin.
 honest pattern: compose the full record, show it to the user, get an explicit yes, then send the
 write with the flag set. **Verified 2026-09-17: the flag is per write and does not carry**, so set
 it on every call. Batching several writes into one call is what lets one approval cover them.
+
+**Verified 2026-09-22: `user_confirmed` accepts the boolean `true`, or the strings `'true'`,
+`'yes'`, `'on'`, `'1'`, case-insensitive. It explicitly rejects a free-form approval phrase** —
+passing the user's actual words ("Yes, create it") fails the write. Extract their consent into one
+of the accepted forms.
+
+**Which writes need the flag is discoverable, not guesswork.** `action: list` on a facade returns a
+`safety_policy.applies_to` array naming the operations that require it. On `wpcom-mcp-site`
+(2026-09-22) that is `settings.update`, `theme.set`, `manage-site.launch`,
+`manage-site.set-visibility`, the `monitor.*` and `account-protection.*` toggles,
+`newsletter.update_settings`, `scan.run`, and the `connection.*` operations. Read the policy rather
+than assuming.
 
 **Timezone.** Site-local time is what the post date means. Confirm the site timezone once per
 session before computing any date.
@@ -310,13 +330,17 @@ If a site cannot be confirmed private, that is a stop condition, not a warning.
 
 ### What `settings.update` can and cannot write
 
-Writable: `blogname`, `blogdescription`, `blog_public` (−1 private / 0 public-discouraged / 1
-public), `timezone_string`, `date_format`, `time_format`, `start_of_week`, `default_role`,
-`users_can_register`, `comment_registration`, `show_on_front`, `page_on_front`.
+Writable, confirmed against the live `describe` on 2026-09-22: `blogname`, `blogdescription`,
+`blog_public` (−1 private / 0 public-discouraged / 1 public), `timezone_string`, `date_format`,
+`time_format`, `start_of_week`, `default_role`, `users_can_register`, `comment_registration`,
+`show_on_front`, `page_on_front`. `blogname` and `blogdescription` also accept the REST-convention
+aliases `name` and `description`; pass both forms and the canonical key wins.
 
 **Not writable — do not claim otherwise to the user:**
 
-- **`default_category`** doesn't exist. A site's default post category cannot be changed.
+- **`default_category`** doesn't exist — absent from the live schema, re-confirmed 2026-09-22. A
+  site's default post category cannot be changed, which is why `needs-triage` only ever catches what
+  a skill assigns to it explicitly.
 - **`default_comment_status` / `default_ping_status`** don't exist. **Comments and pingbacks cannot
   be disabled through the MCP.** `comment_registration: true` only requires a logged-in account.
   Point the user at Settings → Discussion in wp-admin.
