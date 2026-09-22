@@ -4,18 +4,14 @@
     "name": "Automattic",
     "url": "https://github.com/Automattic/Agent-Use-Cases"
   },
-  "metadata": {
-    "description": "Claude Code plugins that teach an agent to use stock WordPress as the substrate for a specific real-world job",
-    "version": "0.2.0"
-  },
+  "description": "Claude Code plugins that teach an agent to use stock WordPress as the substrate for a specific real-world job",
   "plugins": [
     {
       "name": "healthypress",
       "description": "Run a private WordPress.com site as a personal health record: creates a dedicated privacy-hardened site with a closed health taxonomy, then records each event as a private, dated, tagged post. Records and organizes; never diagnoses or advises.",
       "source": "./plugins/healthypress",
-      "version": "0.2.0",
+      "version": "0.2.1",
       "license": "GPL-3.0-or-later",
-      "strict": false,
       "mcpServers": "./.mcp.json",
       "skills": [
         "./skills/setup",

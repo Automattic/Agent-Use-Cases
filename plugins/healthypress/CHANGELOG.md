@@ -2,6 +2,17 @@
 
 All notable changes to HealthyPress are documented here.
 
+## 0.2.1 — 2026-09-22
+
+### Fixed
+
+- **The plugin loads again.** 0.2.0 set `strict: false` on the marketplace entry, which means the
+  entry is the plugin's complete definition and a `plugin.json` that also declares components is a
+  conflict. Claude Code writes exactly such a `plugin.json` into the installed copy, synthesized
+  from the entry, so every install failed with "conflicting manifests: both plugin.json and
+  marketplace entry specify components" and none of the three skills loaded. The entry is back on
+  the default `strict: true`, where the two sources merge instead of colliding.
+
 ## 0.2.0 — 2026-09-19
 
 ### Removed
