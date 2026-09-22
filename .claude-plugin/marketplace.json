@@ -4,10 +4,7 @@
     "name": "Automattic",
     "url": "https://github.com/Automattic/Agent-Use-Cases"
   },
-  "metadata": {
-    "description": "Claude Code plugins that teach an agent to use stock WordPress as the substrate for a specific real-world job",
-    "version": "0.2.0"
-  },
+  "description": "Claude Code plugins that teach an agent to use stock WordPress as the substrate for a specific real-world job",
   "plugins": [
     {
       "name": "healthypress",
