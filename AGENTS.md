@@ -33,7 +33,7 @@ The repo is the marketplace. `.claude-plugin/marketplace.json` declares every pl
 | `ROADMAP.md` | Human + Agent | Shaped / in-flight features — "what next" for autonomous agents |
 | `IDEAS.md` | Human + Agent | Pre-decision sparks; promote to `ROADMAP.md` when shaped |
 | `FOLLOW_UPS.md` | Human + Agent | Deferred items |
-| `./docs/` | Human + Agent | Reference: architecture deep-dives, runbooks, glossary, API refs |
+| `./docs/` | Human + Agent | Reference. Read `docs/plugin-mechanics.md` before adding or changing a plugin, skill, or marketplace entry |
 | `.agents/project-management.md` | Human + Agent | Project-management system of record, issue workflow, tracker conventions |
 | `.agents/decisions/` | Human + Agent | Durable decision records: rationale, alternatives, consequences, supersession |
 | `.agents/reference/` | Agent-first | Long-tail: code-shape patterns, agent operational protocols |
