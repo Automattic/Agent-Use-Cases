@@ -15,7 +15,7 @@
       "source": "./plugins/healthypress",
       "version": "0.2.0",
       "license": "GPL-3.0-or-later",
-      "strict": true,
+      "strict": false,
       "mcpServers": "./.mcp.json",
       "skills": [
         "./skills/setup",
