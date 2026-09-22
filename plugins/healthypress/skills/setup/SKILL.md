@@ -57,11 +57,13 @@ shouldn't be.
 
 Ask the user for a short word to make the name memorable — a first name, nickname, or anything
 else they'd recognize (it does not need to be their real WordPress.com username). Combine it as
-`healthypress-<word>` for both the display title and the derived URL slug.
+`healthypress-<word>` for the display title. Say once that both the title and the URL are public: a
+private site still shows them to anonymous visitors on the login wall.
 
 `describe` then call the provisioning operation on `wpcom-mcp-create-site`. Derive the subdomain
-slug from `healthypress-<word>` using the tool's own derivation rule (lowercase, strip diacritics,
-remove non-alphanumeric), then call `subdomain.check`. If the slug is taken, tell the user and ask
+slug from the title using the tool's own rule — lowercase, strip diacritics, remove every
+non-alphanumeric character, so `healthypress-vo` becomes `healthypressvo` — then call
+`subdomain.check`. If the slug is taken, tell the user and ask
 for a different word, or offer the numeric-suffixed slug WordPress.com proposes instead.
 
 **Get explicit approval before provisioning.** Show the user the proposed title and the exact
